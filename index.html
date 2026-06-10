@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Atelier — Career Operating System</title>
+<meta name="description" content="A professional micro-agency, not a course. Execute real client missions, get reviewed against professional standards, build an employable portfolio." />
+<style>
+:root{
+  --bg:#0a0c10; --bg-elev-1:#11141b; --bg-elev-2:#171b24; --bg-elev-3:#1d222d;
+  --line:#262c38; --line-soft:#1c2129;
+  --text:#eef1f6; --text-dim:#9aa3b2; --text-faint:#626c7c;
+  --accent:#6f7bff; --accent-2:#8b5cf6; --accent-soft:rgba(111,123,255,0.14); --accent-line:rgba(111,123,255,0.40);
+  --success:#34d399; --success-soft:rgba(52,211,153,0.13);
+  --warning:#f5b556; --danger:#f0697a;
+  --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:24px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.4); --shadow-md:0 8px 24px -8px rgba(0,0,0,0.6); --shadow-lg:0 24px 60px -20px rgba(0,0,0,0.7);
+  --ease:cubic-bezier(0.22,0.61,0.36,1);
+  --maxw:1200px;
+  --font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(680px 420px at 78% -8%,rgba(139,92,246,0.13),transparent 70%),radial-gradient(720px 480px at 10% 4%,rgba(111,123,255,0.12),transparent 68%);pointer-events:none;z-index:0}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+ul{list-style:none}
+::selection{background:var(--accent-soft);color:#fff}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#2a313e;border-radius:8px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:#353d4c}
+
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent)}
+.meta{font-size:12px;color:var(--text-dim)}
+.label-xs{font-size:10.5px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 22px;border-radius:var(--r-md);font-size:14px;font-weight:600;letter-spacing:0.01em;transition:transform .18s var(--ease),background .2s var(--ease),box-shadow .2s var(--ease),border-color .2s;white-space:nowrap;border:1px solid transparent}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn-primary{background:linear-gradient(180deg,#7884ff,var(--accent));color:#fff;box-shadow:0 8px 22px -10px rgba(111,123,255,.9),inset 0 1px 0 rgba(255,255,255,.18)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 14px 30px -10px rgba(111,123,255,.85),inset 0 1px 0 rgba(255,255,255,.2)}
+.btn-ghost{background:var(--bg-elev-2);border-color:var(--line);color:var(--text)}
+.btn-ghost:hover{border-color:var(--accent-line);background:var(--bg-elev-3)}
+.btn-block{width:100%}
+.btn-lg{padding:15px 30px;font-size:15px}
+.btn-sm{padding:8px 14px;font-size:12.5px;border-radius:var(--r-sm)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* Chips */
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:11.5px;font-weight:600;background:var(--bg-elev-2);border:1px solid var(--line);color:var(--text-dim)}
+.chip .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.chip-accent{color:var(--accent);border-color:var(--accent-line);background:var(--accent-soft)}
+.chip-success{color:var(--success);border-color:rgba(52,211,153,.35);background:var(--success-soft)}
+.chip-warning{color:var(--warning);border-color:rgba(245,181,86,.32);background:rgba(245,181,86,.1)}
+.chip-locked{color:var(--text-faint)}
+
+.card{background:var(--bg-elev-1);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}
+
+.progress-track{height:8px;border-radius:999px;background:var(--bg-elev-3);overflow:hidden;position:relative}
+.progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0;transition:width .9s var(--ease);box-shadow:0 0 12px rgba(111,123,255,.5)}
+.progress-fill.success{background:linear-gradient(90deg,#2bbd86,var(--success));box-shadow:0 0 12px rgba(52,211,153,.5)}
+
+/* Top nav */
+.topbar{position:sticky;top:0;z-index:100;backdrop-filter:blur(14px);background:rgba(10,12,16,.78);border-bottom:1px solid var(--line-soft)}
+.topbar-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:28px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:16px;letter-spacing:-0.01em}
+.brand-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(140deg,var(--accent),var(--accent-2));display:grid;place-items:center;font-weight:800;font-size:16px;color:#fff;box-shadow:0 4px 14px -4px rgba(111,123,255,.8),inset 0 1px 0 rgba(255,255,255,.25)}
+.brand-sub{font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-faint);margin-top:1px}
+.nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
+.nav-link{padding:8px 14px;border-radius:var(--r-sm);font-size:13.5px;font-weight:500;color:var(--text-dim);transition:color .18s,background .18s;position:relative}
+.nav-link:hover{color:var(--text);background:var(--bg-elev-2)}
+.nav-link.active{color:var(--text)}
+.nav-link.active::after{content:"";position:absolute;left:14px;right:14px;bottom:-3px;height:2px;border-radius:2px;background:var(--accent)}
+.nav-tail{display:flex;align-items:center;gap:14px}
+.rep-pill{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 6px;border-radius:999px;background:var(--bg-elev-2);border:1px solid var(--line);font-size:12px;font-weight:700}
+.rep-pill .rp-badge{width:24px;height:24px;border-radius:50%;background:linear-gradient(140deg,var(--accent),var(--accent-2));display:grid;place-items:center;font-size:10px;color:#fff}
+.rep-pill span{color:var(--text-dim);font-weight:600;font-size:11px}
+.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(140deg,#2a3140,#3a4252);border:1px solid var(--line);display:grid;place-items:center;font-size:12.5px;font-weight:700;color:var(--text)}
+.hamburger{display:none}
+
+.page{display:none;animation:pageIn .5s var(--ease)}
+.page.active{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.container{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+/* Landing */
+.hero{padding:86px 0 60px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:var(--accent-soft);border:1px solid var(--accent-line);font-size:12px;font-weight:600;color:#c3c8ff;margin-bottom:26px}
+.hero h1{font-size:clamp(38px,5.4vw,64px);line-height:1.03;letter-spacing:-0.03em;font-weight:800;margin-bottom:22px}
+.hero h1 .grad{background:linear-gradient(100deg,#aeb6ff,var(--accent) 40%,var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-lede{font-size:18px;color:var(--text-dim);max-width:520px;margin-bottom:16px}
+.identity-shift{display:flex;align-items:center;gap:14px;margin:26px 0 32px;padding:16px 18px;border-radius:var(--r-md);background:var(--bg-elev-1);border:1px solid var(--line);max-width:540px;flex-wrap:wrap}
+.identity-shift .from{color:var(--text-faint);text-decoration:line-through;font-weight:600}
+.identity-shift .arrow{color:var(--accent);font-size:18px}
+.identity-shift .to{color:var(--text);font-weight:700}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.trust-row{display:flex;align-items:center;gap:26px;margin-top:40px;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--text-dim)}
+.trust-item svg{color:var(--success);flex-shrink:0}
+.trust-stats{display:flex;gap:30px;margin-top:34px}
+.trust-stat strong{display:block;font-size:26px;font-weight:800;letter-spacing:-0.02em}
+.trust-stat span{font-size:12px;color:var(--text-faint)}
+.hero-visual{position:relative}
+.mock-brief{background:linear-gradient(180deg,var(--bg-elev-2),var(--bg-elev-1));border:1px solid var(--line);border-radius:var(--r-xl);padding:26px;box-shadow:var(--shadow-lg);position:relative;z-index:2}
+.mock-brief-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+.client-logo{width:44px;height:44px;border-radius:11px;background:linear-gradient(140deg,#ff8a5b,#ff5b87);display:grid;place-items:center;font-weight:800;color:#fff;font-size:16px}
+.mock-brief h3{font-size:19px;letter-spacing:-0.01em;margin:14px 0 6px}
+.mock-brief p{font-size:13.5px;color:var(--text-dim);margin-bottom:18px}
+.mock-brief-row{display:flex;justify-content:space-between;padding:11px 0;border-top:1px solid var(--line-soft);font-size:13px}
+.mock-brief-row span:first-child{color:var(--text-faint)}
+.mock-brief-row span:last-child{color:var(--text);font-weight:600}
+.float-card{position:absolute;border-radius:var(--r-md);padding:12px 15px;background:var(--bg-elev-3);border:1px solid var(--line);box-shadow:var(--shadow-md);z-index:3;display:flex;align-items:center;gap:11px;animation:floaty 5s ease-in-out infinite}
+.float-card.approved{top:-22px;right:-14px}
+.float-card.rep{bottom:-20px;left:-22px;animation-delay:1.5s}
+.float-ic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex-shrink:0}
+.float-card small{display:block;font-size:10.5px;color:var(--text-faint)}
+.float-card strong{font-size:13px}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+.section{padding:64px 0}
+.section-head{text-align:center;max-width:640px;margin:0 auto 44px}
+.section-head h2{font-size:clamp(26px,3.4vw,36px);letter-spacing:-0.02em;font-weight:800;margin:12px 0}
+.section-head p{color:var(--text-dim);font-size:15.5px}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.how-card{padding:26px;border-radius:var(--r-lg);background:var(--bg-elev-1);border:1px solid var(--line);transition:transform .22s var(--ease),border-color .22s}
+.how-card:hover{transform:translateY(-4px);border-color:var(--accent-line)}
+.how-num{font-size:13px;font-weight:800;color:var(--accent);margin-bottom:16px}
+.how-ic{width:46px;height:46px;border-radius:12px;background:var(--accent-soft);display:grid;place-items:center;color:var(--accent);margin-bottom:18px}
+.how-card h3{font-size:17px;margin-bottom:8px;letter-spacing:-0.01em}
+.how-card p{font-size:14px;color:var(--text-dim)}
+.pillars{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:8px}
+.pillar{display:flex;gap:14px;padding:20px;border-radius:var(--r-md);background:var(--bg-elev-1);border:1px solid var(--line)}
+.pillar .p-ic{width:38px;height:38px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.pillar h4{font-size:15px;margin-bottom:4px}
+.pillar p{font-size:13px;color:var(--text-dim)}
+.cta-banner{margin:30px auto 80px;max-width:var(--maxw);border-radius:var(--r-xl);padding:52px 40px;text-align:center;background:radial-gradient(600px 200px at 50% 0%,rgba(111,123,255,.22),transparent 70%),linear-gradient(180deg,var(--bg-elev-2),var(--bg-elev-1));border:1px solid var(--accent-line)}
+.cta-banner h2{font-size:clamp(26px,3.6vw,38px);letter-spacing:-0.02em;margin-bottom:14px;font-weight:800}
+.cta-banner p{color:var(--text-dim);margin-bottom:26px;font-size:16px}
+
+/* App head */
+.app-head{padding:36px 0 8px}
+.app-head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.app-head h1{font-size:28px;letter-spacing:-0.02em}
+.app-head h1 .wave{display:inline-block;animation:wave 2.4s ease-in-out infinite;transform-origin:70% 70%}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}10%{transform:rotate(16deg)}20%{transform:rotate(-8deg)}30%{transform:rotate(14deg)}40%{transform:rotate(-4deg)}}
+.app-head p{color:var(--text-dim);margin-top:4px}
+
+/* Assessment wizard */
+.wizard-wrap{max-width:760px;margin:0 auto;padding:54px 24px 80px}
+.stepper{display:flex;align-items:center;margin-bottom:40px}
+.step-node{display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0}
+.step-dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--bg-elev-2);border:1.5px solid var(--line);font-size:13px;font-weight:700;color:var(--text-faint);transition:.3s var(--ease)}
+.step-node.active .step-dot{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 5px var(--accent-soft)}
+.step-node.done .step-dot{background:var(--success);border-color:var(--success);color:#06281c}
+.step-label{font-size:10.5px;font-weight:600;color:var(--text-faint);letter-spacing:0.02em}
+.step-node.active .step-label,.step-node.done .step-label{color:var(--text)}
+.step-bar{flex:1;height:2px;background:var(--line);margin:0 6px;position:relative;top:-13px;border-radius:2px;overflow:hidden}
+.step-bar span{position:absolute;inset:0;width:0;background:var(--success);transition:width .4s var(--ease)}
+.step-bar.filled span{width:100%}
+.wizard-card{padding:36px}
+.wizard-step{display:none;animation:pageIn .4s var(--ease)}
+.wizard-step.active{display:block}
+.wizard-step .q-dim{margin-bottom:6px}
+.wizard-step h2{font-size:23px;letter-spacing:-0.02em;margin-bottom:8px}
+.wizard-step .scenario{color:var(--text-dim);margin-bottom:24px;font-size:15px}
+.option-grid{display:grid;gap:11px}
+.option{display:flex;align-items:center;gap:14px;padding:15px 18px;border-radius:var(--r-md);background:var(--bg-elev-2);border:1.5px solid var(--line);transition:.18s var(--ease);text-align:left;width:100%}
+.option:hover{border-color:var(--accent-line);transform:translateY(-2px)}
+.option.selected{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 3px rgba(111,123,255,.12)}
+.option-val{width:46px;height:32px;border-radius:8px;flex-shrink:0;display:grid;place-items:center;font-size:12px;font-weight:800;background:var(--bg-elev-3);border:1px solid var(--line);color:var(--text-dim)}
+.option.selected .option-val{background:var(--accent);border-color:var(--accent);color:#fff}
+.option-text{flex:1;font-size:14px}
+.option-check{width:22px;height:22px;border-radius:50%;flex-shrink:0;border:1.5px solid var(--line);display:grid;place-items:center;transition:.18s}
+.option.selected .option-check{background:var(--accent);border-color:var(--accent)}
+.option .option-check svg{opacity:0;transition:.18s}
+.option.selected .option-check svg{opacity:1}
+.wizard-nav{display:flex;justify-content:space-between;gap:12px;margin-top:30px}
+
+/* Profile report */
+.profile-report{text-align:center}
+.reco-badge{width:70px;height:70px;border-radius:18px;margin:0 auto 20px;background:linear-gradient(140deg,var(--accent),var(--accent-2));display:grid;place-items:center;box-shadow:0 12px 30px -10px rgba(111,123,255,.8);animation:pop .6s var(--ease)}
+@keyframes pop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.dim-list{text-align:left;margin:26px 0 8px;display:flex;flex-direction:column;gap:16px}
+.dim-row .dim-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.dim-row .dim-name{font-size:14px;font-weight:600}
+.dim-row .dim-score{font-size:13px;font-weight:700;color:var(--accent)}
+.dim-row .dim-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:2px 8px;border-radius:999px;margin-left:8px}
+.dim-tag.strength{color:var(--success);background:var(--success-soft)}
+.dim-tag.develop{color:var(--warning);background:rgba(245,181,86,.12)}
+.profile-split{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0;text-align:left}
+.profile-box{padding:18px;border-radius:var(--r-md);background:var(--bg-elev-2);border:1px solid var(--line)}
+.profile-box h4{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);margin-bottom:12px}
+.profile-box .pb-item{display:flex;align-items:center;gap:9px;font-size:13.5px;padding:5px 0}
+.profile-box .pb-item .pb-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.reco-missions{text-align:left;margin:24px 0}
+.reco-mission{display:flex;align-items:center;gap:13px;padding:14px 16px;border-radius:var(--r-md);background:var(--bg-elev-2);border:1px solid var(--line-soft);margin-bottom:10px}
+.reco-mission .rm-logo{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-weight:700;color:#fff;font-size:13px;flex-shrink:0}
+.reco-mission strong{font-size:14px;display:block}
+.reco-mission span{font-size:12px;color:var(--text-dim)}
+
+/* Dashboard */
+.dash-grid{display:grid;grid-template-columns:1fr 340px;gap:22px;padding:26px 0 90px}
+.dash-main{display:flex;flex-direction:column;gap:22px}
+.dash-side{display:flex;flex-direction:column;gap:22px}
+.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{padding:18px;border-radius:var(--r-md);background:var(--bg-elev-1);border:1px solid var(--line);position:relative;overflow:hidden}
+.stat .label-xs{margin-bottom:10px}
+.stat-val{font-size:25px;font-weight:800;letter-spacing:-0.02em;line-height:1}
+.stat-val small{font-size:13px;color:var(--text-faint);font-weight:600}
+.stat-sub{font-size:11.5px;color:var(--text-dim);margin-top:6px;display:flex;align-items:center;gap:5px}
+.stat-sub .up{color:var(--success)}
+.stat-ic{position:absolute;top:16px;right:16px;color:var(--text-faint);opacity:.5}
+.why-card{padding:18px 20px;border-radius:var(--r-md);background:linear-gradient(180deg,var(--bg-elev-2),var(--bg-elev-1));border:1px solid var(--line)}
+.why-card .label-xs{margin-bottom:8px}
+.why-card p{font-size:14px;color:var(--text-dim)}
+.why-card p b{color:var(--text);font-weight:600}
+.spotlight{padding:26px;background:radial-gradient(420px 160px at 90% 0%,rgba(139,92,246,.16),transparent 70%),linear-gradient(180deg,var(--bg-elev-2),var(--bg-elev-1));border:1px solid var(--accent-line);border-radius:var(--r-lg)}
+.spotlight-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
+.spotlight h2{font-size:21px;letter-spacing:-0.01em;margin:12px 0 7px}
+.spotlight .client-line{font-size:13px;color:var(--text-dim);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.spotlight-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.spot-meta-item{background:rgba(0,0,0,.2);border:1px solid var(--line-soft);border-radius:var(--r-sm);padding:11px 13px}
+.spot-meta-item .label-xs{margin-bottom:5px}
+.spot-meta-item strong{font-size:14px}
+.spotlight-foot{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.spotlight-foot .progress-track{flex:1;min-width:160px}
+.panel{padding:22px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.panel-head h3{font-size:15.5px;letter-spacing:-0.01em;display:flex;align-items:center;gap:9px}
+.panel-head a{font-size:12.5px;color:var(--accent);font-weight:600}
+.panel-head a:hover{text-decoration:underline}
+.mentor-card{padding:22px}
+.mentor-top{display:flex;align-items:center;gap:13px;margin-bottom:16px}
+.mentor-ava{width:46px;height:46px;border-radius:12px;flex-shrink:0;background:linear-gradient(140deg,#2d3550,#1c2233);border:1px solid var(--accent-line);display:grid;place-items:center;position:relative}
+.mentor-ava::after{content:"";position:absolute;bottom:-2px;right:-2px;width:12px;height:12px;border-radius:50%;background:var(--success);border:2px solid var(--bg-elev-1)}
+.mentor-top strong{font-size:14.5px;display:block}
+.mentor-top span{font-size:11.5px;color:var(--text-dim)}
+.mentor-msg{background:var(--bg-elev-2);border:1px solid var(--line-soft);border-radius:var(--r-md);border-top-left-radius:4px;padding:14px 16px;font-size:13.5px;color:var(--text);line-height:1.55;margin-bottom:14px}
+.mentor-msg .hl{color:var(--accent);font-weight:600}
+.mentor-actions{display:flex;gap:8px;flex-wrap:wrap}
+.mentor-quick{padding:8px 12px;border-radius:999px;background:var(--bg-elev-2);border:1px solid var(--line);font-size:12px;font-weight:500;color:var(--text-dim);transition:.18s}
+.mentor-quick:hover{border-color:var(--accent-line);color:var(--text)}
+.typing{display:inline-flex;gap:3px;align-items:center}
+.typing span{width:5px;height:5px;border-radius:50%;background:var(--text-faint);animation:typing 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+@keyframes typing{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.activity-list{display:flex;flex-direction:column;gap:2px}
+.activity-item{display:flex;gap:13px;padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.activity-item:last-child{border-bottom:none}
+.act-ic{width:32px;height:32px;border-radius:9px;flex-shrink:0;display:grid;place-items:center}
+.act-ic.green{background:var(--success-soft);color:var(--success)}
+.act-ic.accent{background:var(--accent-soft);color:var(--accent)}
+.act-ic.amber{background:rgba(245,181,86,.12);color:var(--warning)}
+.act-body{flex:1}
+.act-body p{font-size:13px;line-height:1.4}
+.act-body time{font-size:11px;color:var(--text-faint)}
+.activity-item.fresh{animation:freshIn .5s var(--ease)}
+@keyframes freshIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1}}
+.notif{display:flex;gap:12px;padding:13px;border-radius:var(--r-md);background:var(--bg-elev-2);border:1px solid var(--line-soft);margin-bottom:10px}
+.notif:last-child{margin-bottom:0}
+.notif-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0}
+.notif p{font-size:13px}.notif time{font-size:11px;color:var(--text-faint)}
+
+/* Missions roadmap */
+.roadmap{padding:26px 0 90px}
+.filter-bar{display:flex;gap:8px;margin-bottom:26px;flex-wrap:wrap}
+.filter-btn{padding:8px 15px;border-radius:999px;font-size:13px;font-weight:600;background:var(--bg-elev-1);border:1px solid var(--line);color:var(--text-dim);transition:.18s}
+.filter-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.filter-btn:hover:not(.active){border-color:var(--accent-line);color:var(--text)}
+.tier-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin:22px 0 12px;display:flex;align-items:center;gap:10px}
+.tier-label::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+.mission-list{display:flex;flex-direction:column;gap:16px}
+.mission-card{display:grid;grid-template-columns:56px 1fr auto;gap:20px;padding:22px;border-radius:var(--r-lg);background:var(--bg-elev-1);border:1px solid var(--line);transition:.2s var(--ease);position:relative}
+.mission-card:hover{border-color:var(--accent-line);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.mission-card.locked{opacity:.6}
+.mission-card.locked:hover{transform:none;border-color:var(--line);box-shadow:none}
+.mission-card.done{border-color:rgba(52,211,153,.3)}
+.mc-rail{display:flex;flex-direction:column;align-items:center}
+.mc-node{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-weight:800;font-size:16px;background:var(--bg-elev-3);border:1px solid var(--line);color:var(--text-dim)}
+.mission-card.active-m .mc-node{background:linear-gradient(140deg,var(--accent),var(--accent-2));color:#fff;border-color:transparent;box-shadow:0 6px 18px -6px rgba(111,123,255,.8)}
+.mission-card.done .mc-node{background:var(--success-soft);color:var(--success);border-color:rgba(52,211,153,.4)}
+.mc-body{min-width:0}
+.mc-toprow{display:flex;align-items:center;gap:10px;margin-bottom:7px;flex-wrap:wrap}
+.mc-client{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-dim)}
+.mc-client .cl-logo{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-size:10px;font-weight:700;color:#fff}
+.mc-body h3{font-size:17.5px;letter-spacing:-0.01em;margin-bottom:6px}
+.mc-desc{font-size:13.5px;color:var(--text-dim);margin-bottom:14px;max-width:560px}
+.mc-tags{display:flex;gap:16px;flex-wrap:wrap}
+.mc-tag{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-dim)}
+.mc-tag svg{color:var(--text-faint);flex-shrink:0}
+.mc-tag strong{color:var(--text);font-weight:600}
+.diff-dots{display:inline-flex;gap:3px}
+.diff-dots i{width:6px;height:6px;border-radius:50%;background:var(--line);display:inline-block}
+.diff-dots i.on{background:var(--accent)}
+.mc-right{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:14px}
+
+/* War Room */
+.warroom{padding:26px 0 90px}
+.wr-back{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--text-dim);font-weight:600;margin-bottom:18px}
+.wr-back:hover{color:var(--text)}
+.wr-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:6px}
+.wr-head h1{font-size:25px;letter-spacing:-0.02em;margin:10px 0 6px}
+.wr-client{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--text-dim)}
+.wr-grid{display:grid;grid-template-columns:1fr 320px;gap:22px;margin-top:24px}
+.wr-brief{display:flex;flex-direction:column;gap:18px}
+.wr-section{padding:22px}
+.wr-section h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);margin-bottom:12px;display:flex;align-items:center;gap:9px}
+.wr-section p{font-size:14.5px;color:var(--text-dim);line-height:1.6}
+.wr-list li{font-size:14px;color:var(--text-dim);padding:7px 0 7px 24px;position:relative}
+.wr-list li::before{content:"";position:absolute;left:4px;top:15px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.wr-list.checks li::before{display:none}
+.wr-list.checks li{padding-left:30px}
+.wr-list.checks li svg{position:absolute;left:2px;top:8px;color:var(--success)}
+.wr-deliverable{display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:var(--r-md);background:var(--bg-elev-2);border:1px solid var(--line-soft);margin-bottom:10px}
+.wr-deliverable .wd-ic{width:34px;height:34px;border-radius:9px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex-shrink:0}
+.wr-deliverable strong{font-size:14px;display:block}
+.wr-deliverable span{font-size:12px;color:var(--text-dim)}
+.wr-side{display:flex;flex-direction:column;gap:18px}
+.submit-card{padding:22px;position:sticky;top:84px}
+.submit-card h3{font-size:16px;margin-bottom:4px}
+.submit-card>.meta{margin-bottom:16px}
+.dropzone{border:1.5px dashed var(--line);border-radius:var(--r-md);padding:24px;text-align:center;background:var(--bg-elev-2);transition:.2s;cursor:pointer;margin-bottom:14px}
+.dropzone:hover{border-color:var(--accent-line);background:var(--bg-elev-3)}
+.dropzone svg{color:var(--text-faint);margin-bottom:8px}
+.dropzone p{font-size:13px;color:var(--text-dim)}
+.dropzone.has-file{border-color:var(--success);border-style:solid;background:var(--success-soft)}
+.dropzone.has-file svg{color:var(--success)}
+.dropzone.has-file p{color:var(--text)}
+.field-label{font-size:12.5px;font-weight:600;color:var(--text-dim);margin-bottom:8px;display:block}
+.wr-textarea{width:100%;background:var(--bg-elev-2);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;color:var(--text);font-family:inherit;font-size:13.5px;resize:vertical;min-height:84px;margin-bottom:16px;transition:.18s}
+.wr-textarea:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft)}
+.revision-note{font-size:11.5px;color:var(--text-faint);text-align:center;margin-top:12px}
+
+/* Review overlay */
+.review-overlay{position:fixed;inset:0;z-index:350;display:none;background:rgba(5,7,10,.72);backdrop-filter:blur(8px);padding:24px;overflow-y:auto}
+.review-overlay.open{display:grid;place-items:center;animation:sxpFade .4s var(--ease)}
+.review-modal{max-width:560px;width:100%;background:linear-gradient(180deg,var(--bg-elev-2),var(--bg-elev-1));border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);overflow:hidden;animation:phaseRise .5s var(--ease)}
+.review-loading{padding:50px 40px;text-align:center}
+.review-spinner{width:46px;height:46px;border-radius:50%;border:3px solid var(--bg-elev-3);border-top-color:var(--accent);margin:0 auto 20px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.review-loading h3{font-size:18px;margin-bottom:6px}
+.review-loading p{font-size:13.5px;color:var(--text-dim)}
+.review-body{padding:28px}
+.review-status-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.review-status-ic{width:52px;height:52px;border-radius:14px;flex-shrink:0;display:grid;place-items:center;background:linear-gradient(140deg,#46e0a8,var(--success));color:#06281c;box-shadow:0 10px 26px -8px rgba(52,211,153,.6)}
+.review-status-head .rs-status{font-size:21px;font-weight:800;letter-spacing:-0.02em}
+.review-status-head .rs-by{font-size:12.5px;color:var(--text-dim)}
+.review-block{margin-bottom:18px}
+.review-block h4{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:7px}
+.review-block.impact h4{color:var(--warning)}
+.review-block p{font-size:13.5px;color:var(--text-dim);line-height:1.6}
+.rep-change{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:var(--r-md);background:var(--success-soft);border:1px solid rgba(52,211,153,.3);margin:6px 0 22px}
+.rep-change .rc-label{font-size:13px;font-weight:600}
+.rep-change .rc-val{font-size:15px;font-weight:800;color:var(--success)}
+
+/* Progress / reputation */
+.prog-wrap{padding:26px 0 90px;display:flex;flex-direction:column;gap:22px}
+.prog-hero{display:grid;grid-template-columns:1.4fr 1fr;gap:22px}
+.level-card{padding:28px}
+.ring-wrap{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.ring{position:relative;width:132px;height:132px;flex-shrink:0}
+.ring svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--bg-elev-3);stroke-width:11}
+.ring-fg{fill:none;stroke:url(#ringGrad);stroke-width:11;stroke-linecap:round;transition:stroke-dashoffset 1.2s var(--ease)}
+.ring-center{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring-center strong{font-size:30px;font-weight:800;letter-spacing:-0.02em;line-height:1}
+.ring-center span{font-size:10.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.1em}
+.level-info h3{font-size:22px;letter-spacing:-0.01em;margin-bottom:6px}
+.level-info p{font-size:13.5px;color:var(--text-dim);margin-bottom:16px}
+.rep-breakdown{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.rep-bd-row .rb-top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px}
+.rep-bd-row .rb-top span:last-child{font-weight:700}
+.streak-card{padding:28px;display:flex;flex-direction:column;justify-content:center}
+.streak-flame{font-size:40px;margin-bottom:8px}
+.streak-big{font-size:42px;font-weight:800;letter-spacing:-0.02em;line-height:1}
+.streak-days{display:flex;gap:7px;margin-top:18px}
+.streak-day{flex:1;height:38px;border-radius:8px;background:var(--bg-elev-3);border:1px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--text-faint)}
+.streak-day.on{background:linear-gradient(180deg,rgba(245,181,86,.2),rgba(245,181,86,.08));border-color:rgba(245,181,86,.4);color:var(--warning)}
+.streak-day.today{box-shadow:0 0 0 2px var(--warning)}
+/* Rank ladder */
+.rank-ladder{display:flex;gap:0;position:relative}
+.rank-step{flex:1;text-align:center;position:relative;padding-top:30px}
+.rank-step::before{content:"";position:absolute;top:13px;left:-50%;width:100%;height:2px;background:var(--line)}
+.rank-step:first-child::before{display:none}
+.rank-step.reached::before{background:var(--success)}
+.rank-node{position:absolute;top:0;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:var(--bg-elev-2);border:1.5px solid var(--line);display:grid;place-items:center;font-size:11px;color:var(--text-faint)}
+.rank-step.reached .rank-node{background:var(--success);border-color:var(--success);color:#06281c}
+.rank-step.current .rank-node{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 5px var(--accent-soft)}
+.rank-step .rank-name{font-size:12px;font-weight:700;margin-top:4px}
+.rank-step.current .rank-name{color:var(--accent)}
+.rank-step .rank-req{font-size:10.5px;color:var(--text-faint)}
+.milestone-list{display:flex;flex-direction:column}
+.milestone{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line-soft)}
+.milestone:last-child{border-bottom:none}
+.ms-check{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;border:1.5px solid var(--line)}
+.ms-check.done{background:var(--success);border-color:var(--success);color:#06281c}
+.ms-check.current{border-color:var(--accent);color:var(--accent)}
+.ms-body{flex:1}
+.ms-body strong{font-size:14px;display:block}
+.ms-body span{font-size:12.5px;color:var(--text-dim)}
+.ms-rep{font-size:12px;font-weight:700;color:var(--accent)}
+
+/* Portfolio / Evidence Package */
+.cert-wrap{padding:40px 0 90px;max-width:920px;margin:0 auto}
+.cert-celebrate{text-align:center;margin-bottom:36px}
+.cert-celebrate .reco-badge{width:64px;height:64px}
+.cert-celebrate h1{font-size:clamp(28px,4vw,40px);letter-spacing:-0.02em;margin-bottom:12px}
+.cert-celebrate p{color:var(--text-dim);font-size:16px;max-width:540px;margin:0 auto}
+.evidence-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px}
+.ev-stat{padding:18px;border-radius:var(--r-md);background:var(--bg-elev-1);border:1px solid var(--line);text-align:center}
+.ev-stat strong{display:block;font-size:24px;font-weight:800;letter-spacing:-0.02em}
+.ev-stat strong.accent{color:var(--accent)}.ev-stat strong.success{color:var(--success)}
+.ev-stat span{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.06em}
+.certificate{border-radius:var(--r-xl);padding:4px;background:linear-gradient(140deg,var(--accent),var(--accent-2) 60%,#ff8a5b);box-shadow:var(--shadow-lg);margin-bottom:30px}
+.cert-inner{background:radial-gradient(500px 200px at 100% 0%,rgba(139,92,246,.12),transparent 70%),linear-gradient(180deg,#0d1017,#11141b);border-radius:21px;padding:40px;position:relative;overflow:hidden}
+.cert-inner::after{content:"ATELIER";position:absolute;bottom:-34px;right:10px;font-size:130px;font-weight:900;letter-spacing:-0.05em;color:rgba(255,255,255,.022);pointer-events:none}
+.cert-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:30px}
+.cert-seal{width:58px;height:58px;border-radius:50%;background:linear-gradient(140deg,var(--accent),var(--accent-2));display:grid;place-items:center;box-shadow:0 8px 24px -8px rgba(111,123,255,.8)}
+.cert-label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-faint);margin-bottom:14px}
+.cert-inner h2{font-size:30px;letter-spacing:-0.02em;margin-bottom:6px}
+.cert-name{font-size:22px;font-weight:700;background:linear-gradient(100deg,#fff,#aeb6ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.cert-track{color:var(--text-dim);font-size:14.5px;margin-bottom:28px}
+.cert-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:22px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:24px}
+.cert-stat strong{display:block;font-size:24px;font-weight:800;letter-spacing:-0.02em}
+.cert-stat span{font-size:11.5px;color:var(--text-faint)}
+.cert-skills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.cert-foot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:26px}
+.cert-sign{font-family:Georgia,serif;font-style:italic;font-size:19px;color:var(--text);border-bottom:1px solid var(--line);padding-bottom:4px}
+.cert-sign-label{font-size:11px;color:var(--text-faint);margin-top:6px}
+.cert-id{font-size:11px;color:var(--text-faint);font-family:monospace}
+.cert-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
+.asset-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+.asset-card{border-radius:var(--r-lg);overflow:hidden;background:var(--bg-elev-1);border:1px solid var(--line);transition:.2s var(--ease)}
+.asset-card:hover{border-color:var(--accent-line);transform:translateY(-3px)}
+.asset-thumb{height:96px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:22px;position:relative}
+.asset-thumb .asset-badge{position:absolute;top:10px;right:10px}
+.asset-meta{padding:16px}
+.asset-meta .label-xs{margin-bottom:6px}
+.asset-meta h4{font-size:15px;margin-bottom:6px;letter-spacing:-0.01em}
+.asset-meta .asset-review{font-size:12.5px;color:var(--text-dim);font-style:italic;border-left:2px solid var(--accent-line);padding-left:10px;margin-top:10px}
+.asset-card.ghost{opacity:.5;border-style:dashed}
+.asset-card.ghost .asset-thumb{background:var(--bg-elev-3);color:var(--text-faint)}
+.cm-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--r-md);background:var(--bg-elev-2);border:1px solid var(--line-soft);margin-bottom:10px}
+.cm-check{width:26px;height:26px;border-radius:50%;background:var(--success);display:grid;place-items:center;color:#06281c;flex-shrink:0}
+.cm-item strong{font-size:14px;flex:1}
+.skills-matrix{display:flex;flex-wrap:wrap;gap:10px}
+.skill-tag{display:flex;align-items:center;gap:8px;padding:8px 13px;border-radius:999px;background:var(--bg-elev-2);border:1px solid var(--line);font-size:12.5px;font-weight:600}
+.skill-tag .sk-count{width:18px;height:18px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:10px;font-weight:800}
+
+.bottom-nav{display:none}
+.footer{border-top:1px solid var(--line-soft);padding:30px 0;text-align:center;color:var(--text-faint);font-size:12.5px}
+.toast-wrap{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:500;display:flex;flex-direction:column;gap:10px;align-items:center;pointer-events:none}
+.toast{display:flex;align-items:center;gap:11px;padding:13px 18px;border-radius:var(--r-md);background:var(--bg-elev-3);border:1px solid var(--line);box-shadow:var(--shadow-lg);font-size:13.5px;font-weight:500;animation:toastIn .35s var(--ease)}
+.toast .toast-ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex-shrink:0;background:var(--success-soft);color:var(--success)}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.toast.out{animation:toastOut .3s var(--ease) forwards}
+@keyframes toastOut{to{opacity:0;transform:translateY(16px)}}
+
+/* Success experience */
+.success-xp{position:fixed;inset:0;z-index:400;display:none;background:radial-gradient(800px 500px at 50% -10%,rgba(111,123,255,.18),transparent 65%),radial-gradient(700px 500px at 80% 110%,rgba(139,92,246,.16),transparent 60%),#07090d;overflow-y:auto}
+.success-xp.open{display:block;animation:sxpFade .6s var(--ease)}
+@keyframes sxpFade{from{opacity:0}to{opacity:1}}
+.sxp-stage{min-height:100vh;max-width:720px;margin:0 auto;padding:70px 24px 120px;display:flex;flex-direction:column;justify-content:center}
+.sxp-dots{position:fixed;top:26px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:2}
+.sxp-dots i{width:28px;height:4px;border-radius:4px;background:var(--bg-elev-3);transition:.4s var(--ease)}
+.sxp-dots i.on{background:var(--accent)}
+.sxp-skip{position:fixed;top:22px;right:24px;z-index:2;font-size:12.5px;color:var(--text-faint);font-weight:600;padding:8px 12px;border-radius:8px;transition:.18s}
+.sxp-skip:hover{color:var(--text);background:var(--bg-elev-2)}
+.sxp-phase{display:none}
+.sxp-phase.active{display:block;animation:phaseRise .7s var(--ease)}
+@keyframes phaseRise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(14px)}
+.reveal.shown{opacity:1;transform:translateY(0);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.sxp-seal{width:92px;height:92px;border-radius:26px;margin:0 auto 30px;background:linear-gradient(140deg,var(--accent),var(--accent-2));display:grid;place-items:center;position:relative;box-shadow:0 20px 50px -16px rgba(111,123,255,.85),inset 0 1px 0 rgba(255,255,255,.25)}
+.sxp-seal::before{content:"";position:absolute;inset:-10px;border-radius:32px;border:1px solid var(--accent-line);animation:sealPulse 2.6s ease-out infinite}
+@keyframes sealPulse{0%{transform:scale(.92);opacity:.9}100%{transform:scale(1.35);opacity:0}}
+.sxp-center{text-align:center}
+.sxp-eyebrow{text-align:center}
+.sxp-headline{text-align:center;font-size:clamp(34px,6vw,54px);font-weight:800;letter-spacing:-0.03em;line-height:1.04;margin:18px 0}
+.sxp-sub{text-align:center;font-size:17px;color:var(--text-dim);max-width:460px;margin:0 auto}
+.sxp-from-manager{display:inline-flex;align-items:center;gap:10px;margin:0 auto 8px;padding:7px 14px;border-radius:999px;background:var(--bg-elev-2);border:1px solid var(--line);font-size:12.5px;color:var(--text-dim);font-weight:600}
+.sxp-from-manager .mentor-ava{width:24px;height:24px;border-radius:7px}
+.sxp-from-manager .mentor-ava::after{width:8px;height:8px;bottom:-2px;right:-2px}
+.identity-upgrade{display:flex;align-items:center;justify-content:center;gap:22px;margin:8px auto 26px;flex-wrap:wrap}
+.id-box{text-align:center;padding:22px 30px;border-radius:var(--r-lg);min-width:190px;border:1px solid var(--line);background:var(--bg-elev-1)}
+.id-box .label-xs{margin-bottom:10px}
+.id-box .id-name{font-size:24px;font-weight:800;letter-spacing:-0.02em}
+.id-box.before{opacity:.55}
+.id-box.before .id-name{color:var(--text-faint);text-decoration:line-through;text-decoration-color:var(--danger)}
+.id-box.after{border-color:var(--accent-line);background:linear-gradient(180deg,var(--accent-soft),var(--bg-elev-1));box-shadow:0 14px 40px -16px rgba(111,123,255,.6)}
+.id-box.after .id-name{background:linear-gradient(100deg,#fff,#aeb6ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.id-arrow{color:var(--accent);animation:arrowSlide 1.6s var(--ease) infinite}
+@keyframes arrowSlide{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+.impact-list{max-width:460px;margin:30px auto 0;display:flex;flex-direction:column;gap:12px}
+.impact-item{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:var(--r-md);background:var(--bg-elev-1);border:1px solid var(--line)}
+.impact-plus{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;font-weight:800;font-size:18px;background:var(--success-soft);color:var(--success);border:1px solid rgba(52,211,153,.35)}
+.impact-item strong{font-size:15px;display:block}
+.impact-item span{font-size:12.5px;color:var(--text-dim)}
+.status-card{max-width:440px;margin:26px auto 0;padding:4px;border-radius:var(--r-xl);background:linear-gradient(140deg,var(--accent),var(--accent-2) 70%);box-shadow:var(--shadow-lg)}
+.status-inner{background:linear-gradient(180deg,#0d1017,#11141b);border-radius:20px;padding:26px}
+.status-head{display:flex;align-items:center;gap:15px;margin-bottom:22px}
+.status-ava{width:56px;height:56px;border-radius:15px;flex-shrink:0;background:linear-gradient(140deg,#2a3140,#3a4252);display:grid;place-items:center;font-size:18px;font-weight:800;border:1px solid var(--accent-line)}
+.status-head h3{font-size:19px;letter-spacing:-0.01em}
+.status-head p{font-size:13px;color:var(--text-dim)}
+.status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.status-stat{text-align:center;padding:14px 8px;border-radius:var(--r-md);background:var(--bg-elev-2);border:1px solid var(--line-soft)}
+.status-stat strong{display:block;font-size:21px;font-weight:800;letter-spacing:-0.02em}
+.status-stat strong.accent{color:var(--accent)}.status-stat strong.success{color:var(--success)}
+.status-stat span{font-size:10.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.06em}
+.rank-badge{margin-left:auto}
+.next-brief{max-width:480px;margin:26px auto 0;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--accent-line);background:linear-gradient(180deg,var(--bg-elev-2),var(--bg-elev-1))}
+.next-brief-top{padding:22px 24px}
+.next-brief-top .nb-row{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid var(--line-soft);font-size:14px}
+.next-brief-top .nb-row:first-of-type{border-top:none}
+.next-brief-top .nb-row span:first-child{color:var(--text-faint)}
+.next-brief-top .nb-row span:last-child{font-weight:600;text-align:right}
+.next-brief-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.nb-locked-hint{font-size:12px;color:var(--text-faint);text-align:center;padding:12px;background:rgba(0,0,0,.25)}
+.timeline{max-width:420px;margin:28px auto 0;position:relative;padding-left:8px}
+.tl-item{display:flex;gap:18px;padding-bottom:26px;position:relative}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:"";position:absolute;left:13px;top:30px;bottom:-4px;width:2px;background:var(--line)}
+.tl-item:last-child::before{display:none}
+.tl-node{width:28px;height:28px;border-radius:50%;flex-shrink:0;z-index:1;display:grid;place-items:center;font-size:12px;background:var(--bg-elev-2);border:1.5px solid var(--line);color:var(--text-faint)}
+.tl-item.done .tl-node{background:var(--success);border-color:var(--success);color:#06281c}
+.tl-item.next .tl-node{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.tl-body strong{font-size:15px;display:block}
+.tl-body span{font-size:12.5px;color:var(--text-dim)}
+.tl-item.locked .tl-body strong{color:var(--text-faint)}
+.sxp-cta{margin-top:36px;display:flex;flex-direction:column;gap:12px;align-items:center}
+.sxp-cta .btn{min-width:280px}
+.sxp-cta-text{font-size:13px;color:var(--text-faint)}
+
+/* Mobile menu */
+.mobile-menu{position:fixed;inset:0;z-index:200;background:rgba(5,7,10,.6);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .25s}
+.mobile-menu.open{opacity:1;pointer-events:auto}
+.mobile-menu-panel{position:absolute;top:0;right:0;bottom:0;width:min(300px,82vw);background:var(--bg-elev-1);border-left:1px solid var(--line);padding:22px;transform:translateX(100%);transition:transform .3s var(--ease);display:flex;flex-direction:column;gap:6px}
+.mobile-menu.open .mobile-menu-panel{transform:translateX(0)}
+.mobile-menu-panel .nav-link{padding:14px 16px;font-size:15px;border-radius:var(--r-md)}
+.mobile-menu-panel .nav-link.active{background:var(--accent-soft);color:var(--text)}
+.mm-close{align-self:flex-end;width:38px;height:38px;border-radius:10px;background:var(--bg-elev-2);border:1px solid var(--line);display:grid;place-items:center;margin-bottom:10px}
+
+.hidden{display:none!important}
+
+/* Responsive */
+@media (max-width:980px){
+  .hero-grid{grid-template-columns:1fr;gap:44px}
+  .hero-visual{max-width:420px}
+  .how-grid{grid-template-columns:1fr}
+  .pillars{grid-template-columns:1fr}
+  .dash-grid{grid-template-columns:1fr}
+  .wr-grid{grid-template-columns:1fr}
+  .submit-card{position:static}
+  .stat-strip,.evidence-bar{grid-template-columns:repeat(2,1fr)}
+  .prog-hero{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .hamburger{display:grid;place-items:center;margin-left:auto;width:40px;height:40px;border-radius:10px;background:var(--bg-elev-2);border:1px solid var(--line)}
+  .nav-tail .rep-pill{display:none}
+}
+@media (max-width:680px){
+  .container,.topbar-inner{padding:0 16px}
+  .hero{padding:48px 0 36px}
+  .wizard-card{padding:22px 18px}
+  .stat-strip,.evidence-bar{grid-template-columns:1fr 1fr}
+  .profile-split{grid-template-columns:1fr}
+  .spotlight-meta{grid-template-columns:1fr}
+  .mission-card{grid-template-columns:44px 1fr}
+  .mc-right{grid-column:1 / -1;flex-direction:row;align-items:center;justify-content:space-between}
+  .asset-grid{grid-template-columns:1fr}
+  .cert-stats{grid-template-columns:1fr;gap:12px;text-align:center}
+  .cert-inner{padding:26px 20px}
+  .trust-stats{gap:20px}
+  .step-label{display:none}
+  .rank-step .rank-req{display:none}
+  .id-box{min-width:150px;padding:18px 22px}
+  .status-grid{grid-template-columns:1fr}
+  .sxp-cta .btn{min-width:0;width:100%}
+  .bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:120;background:rgba(13,16,23,.92);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+  .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--text-faint);font-size:10px;font-weight:600;transition:color .18s}
+  .bn-item.active{color:var(--accent)}
+  body{padding-bottom:64px}
+  .toast-wrap{bottom:80px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#" onclick="go('landing');return false;">
+      <span class="brand-mark">A</span>
+      <span>Atelier<span class="brand-sub">Career OS</span></span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a class="nav-link" data-nav="landing" onclick="go('landing');return false;">Overview</a>
+      <a class="nav-link" data-nav="assessment" onclick="go('assessment');return false;">Assessment</a>
+      <a class="nav-link" data-nav="dashboard" onclick="go('dashboard');return false;">Dashboard</a>
+      <a class="nav-link" data-nav="missions" onclick="go('missions');return false;">Missions</a>
+      <a class="nav-link" data-nav="progress" onclick="go('progress');return false;">Reputation</a>
+      <a class="nav-link" data-nav="portfolio" onclick="go('portfolio');return false;">Portfolio</a>
+    </nav>
+    <div class="nav-tail">
+      <div class="rep-pill" title="Professional reputation" onclick="go('progress')">
+        <span class="rp-badge" id="navRepBadge">A</span>
+        <strong id="navRep">50</strong><span>/100</span>
+      </div>
+      <div class="avatar" title="Junior professional">YE</div>
+      <button class="hamburger" onclick="toggleMenu(true)" aria-label="Menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu" onclick="if(event.target===this)toggleMenu(false)">
+  <div class="mobile-menu-panel">
+    <button class="mm-close" onclick="toggleMenu(false)" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <a class="nav-link" onclick="go('landing');toggleMenu(false);return false;">Overview</a>
+    <a class="nav-link" onclick="go('assessment');toggleMenu(false);return false;">Assessment</a>
+    <a class="nav-link" onclick="go('dashboard');toggleMenu(false);return false;">Dashboard</a>
+    <a class="nav-link" onclick="go('missions');toggleMenu(false);return false;">Missions</a>
+    <a class="nav-link" onclick="go('progress');toggleMenu(false);return false;">Reputation</a>
+    <a class="nav-link" onclick="go('portfolio');toggleMenu(false);return false;">Portfolio</a>
+  </div>
+</div>
+
+<main>
+
+<!-- ============ PAGE 1: LANDING ============ -->
+<section class="page active" id="page-landing">
+  <div class="container">
+    <div class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="hero-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>
+            A Career Operating System — not a course
+          </span>
+          <h1>Stop completing courses.<br><span class="grad">Start delivering work.</span></h1>
+          <p class="hero-lede">Atelier is a professional micro-agency. You join as a junior professional, execute real client missions, and have every deliverable reviewed against professional standards by an AI Senior Manager — approved, or sent back with notes.</p>
+          <div class="identity-shift">
+            <span class="from">Student</span>
+            <span class="arrow">→</span>
+            <span class="to">Contributor</span>
+            <span class="arrow">→</span>
+            <span class="to" style="color:var(--accent)">Specialist</span>
+            <span class="chip chip-accent" style="margin-left:auto;">Identity, earned</span>
+          </div>
+          <div class="hero-cta">
+            <button class="btn btn-primary btn-lg" onclick="go('assessment')">
+              Start professional assessment
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+            <button class="btn btn-ghost btn-lg" onclick="go('dashboard')">Preview the workspace</button>
+          </div>
+          <div class="trust-row">
+            <div class="trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Reviewed against professional standards</div>
+            <div class="trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Evidence, not certificates</div>
+          </div>
+          <div class="trust-stats">
+            <div class="trust-stat"><strong>5</strong><span>Agency ranks</span></div>
+            <div class="trust-stat"><strong>0–100</strong><span>Reputation score</span></div>
+            <div class="trust-stat"><strong>1:1</strong><span>Mission = portfolio asset</span></div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="mock-brief">
+            <div class="mock-brief-head">
+              <div class="client-logo">N</div>
+              <span class="chip chip-warning"><span class="dot"></span>New brief</span>
+            </div>
+            <span class="meta">Client · Nimbus Coffee Co.</span>
+            <h3>Launch landing page for the cold brew line</h3>
+            <p>Conversion-focused, mobile-first. Make pre-orders feel effortless.</p>
+            <div class="mock-brief-row"><span>Deliverable</span><span>Responsive landing page</span></div>
+            <div class="mock-brief-row"><span>Deadline</span><span>5 days</span></div>
+            <div class="mock-brief-row"><span>Tier</span><span>Associate</span></div>
+            <div class="mock-brief-row"><span>Reviewer</span><span>Maya · Senior Manager</span></div>
+          </div>
+          <div class="float-card approved">
+            <div class="float-ic" style="background:var(--success-soft);color:var(--success);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div><small>Manager review</small><strong>Deliverable approved</strong></div>
+          </div>
+          <div class="float-card rep">
+            <div class="float-ic" style="background:var(--accent-soft);color:var(--accent);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21.4 8 14 2 9.4h7.6z"/></svg></div>
+            <div><small>Reputation</small><strong>50 → 56</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+      <div class="section-head">
+        <span class="eyebrow">The core loop</span>
+        <h2>Execution, review, evidence</h2>
+        <p>Every step mirrors a real junior role. You receive work, you ship it, it gets judged against professional standards.</p>
+      </div>
+      <div class="how-grid">
+        <div class="how-card">
+          <div class="how-num">01</div>
+          <div class="how-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div>
+          <h3>Accept the brief</h3>
+          <p>A client posts context, a problem, objectives, and a deadline. You commit, then execute in the Mission War Room.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">02</div>
+          <div class="how-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></div>
+          <h3>Submit the deliverable</h3>
+          <p>Your AI Senior Manager guides your thinking — never hands you the answer. The work must be yours.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">03</div>
+          <div class="how-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div>
+          <h3>Pass the review</h3>
+          <p>Approved, Exceptional, or Needs Revision. Approvals build reputation, raise your rank, and create portfolio assets.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" style="padding-top:0">
+      <div class="section-head">
+        <span class="eyebrow">Why it's different</span>
+        <h2>Reputation over gamification</h2>
+        <p>No XP, no confetti, no toy rewards. A transparent 0–100 credibility score you'd be proud to show an employer.</p>
+      </div>
+      <div class="pillars">
+        <div class="pillar">
+          <div class="p-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a3 3 0 013 3v1a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v1a7 7 0 01-14 0v-1"/></svg></div>
+          <div><h4>Professional identity</h4><p>You execute missions and earn rank promotions — you don't take lessons or level up.</p></div>
+        </div>
+        <div class="pillar">
+          <div class="p-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></div>
+          <div><h4>Evidence-first</h4><p>Every approved mission becomes a shareable portfolio asset. The portfolio is the credential.</p></div>
+        </div>
+        <div class="pillar">
+          <div class="p-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div>
+          <div><h4>Rigorous review</h4><p>A standards-driven mentor, not a cheerleader. Honest feedback: strengths, gaps, real-world impact, next step.</p></div>
+        </div>
+        <div class="pillar">
+          <div class="p-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div>
+          <div><h4>Earned progression</h4><p>Associate → Specialist → Senior Specialist → Lead → Partner. Slow to build, meaningful to hold.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="cta-banner">
+      <h2>Your first client is waiting.</h2>
+      <p>Begin with a short professional assessment so we can place you on the right brief.</p>
+      <button class="btn btn-primary btn-lg" onclick="go('assessment')">Begin assessment →</button>
+    </div>
+  </div>
+  <footer class="footer">Atelier Career OS · A prototype for mission-based professional development · Concept only</footer>
+</section>
+
+<!-- ============ PAGE 2: PROFESSIONAL ASSESSMENT ============ -->
+<section class="page" id="page-assessment">
+  <div class="wizard-wrap">
+    <span class="eyebrow" style="display:block;text-align:center;margin-bottom:6px;">Professional Operating Profile™</span>
+    <h1 style="text-align:center;font-size:26px;letter-spacing:-0.02em;margin-bottom:8px;">How do you actually operate?</h1>
+    <p style="text-align:center;color:var(--text-dim);font-size:14.5px;margin-bottom:32px;">Five scenario-based questions. No right answers — this calibrates your missions, not a grade.</p>
+
+    <div class="stepper" id="stepper">
+      <div class="step-node active" data-step="0"><div class="step-dot">1</div><div class="step-label">Execution</div></div>
+      <div class="step-bar"><span></span></div>
+      <div class="step-node" data-step="1"><div class="step-dot">2</div><div class="step-label">Agility</div></div>
+      <div class="step-bar"><span></span></div>
+      <div class="step-node" data-step="2"><div class="step-dot">3</div><div class="step-label">Ownership</div></div>
+      <div class="step-bar"><span></span></div>
+      <div class="step-node" data-step="3"><div class="step-dot">4</div><div class="step-label">Collaboration</div></div>
+      <div class="step-bar"><span></span></div>
+      <div class="step-node" data-step="4"><div class="step-dot">5</div><div class="step-label">Resilience</div></div>
+      <div class="step-bar"><span></span></div>
+      <div class="step-node" data-step="5"><div class="step-dot">6</div><div class="step-label">Profile</div></div>
+    </div>
+
+    <div class="card wizard-card">
+      <!-- Q1 Execution Discipline -->
+      <div class="wizard-step active" data-wstep="0">
+        <div class="eyebrow q-dim">Execution Discipline</div>
+        <h2>The deadline is in two days.</h2>
+        <p class="scenario">You committed to a deadline, but motivation has faded and the work is only half done. You…</p>
+        <div class="option-grid" data-group="exec">
+          <button class="option" onclick="pickScenario(this,'exec',100)"><span class="option-val">100</span><span class="option-text">Block focused time and finish before the deadline, regardless of how I feel</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'exec',75)"><span class="option-val">75</span><span class="option-text">Break the rest into small tasks and grind through them</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'exec',50)"><span class="option-val">50</span><span class="option-text">Push to finish but ask for a short extension</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'exec',25)"><span class="option-val">25</span><span class="option-text">Deliver whatever is done by the deadline</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'exec',0)"><span class="option-val">0</span><span class="option-text">Miss the deadline and move on</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+        </div>
+      </div>
+
+      <!-- Q2 Learning Agility -->
+      <div class="wizard-step" data-wstep="1">
+        <div class="eyebrow q-dim">Learning Agility</div>
+        <h2>A brief in a domain you've never touched.</h2>
+        <p class="scenario">You're handed work in an unfamiliar field. You…</p>
+        <div class="option-grid" data-group="agility">
+          <button class="option" onclick="pickScenario(this,'agility',100)"><span class="option-val">100</span><span class="option-text">Rapidly map the unknowns, find references, and ship a rough first version fast</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'agility',75)"><span class="option-val">75</span><span class="option-text">Research thoroughly before starting</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'agility',50)"><span class="option-val">50</span><span class="option-text">Start, but lean heavily on examples to copy</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'agility',25)"><span class="option-val">25</span><span class="option-text">Wait for someone to explain it first</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'agility',0)"><span class="option-val">0</span><span class="option-text">Avoid it and ask to switch tasks</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+        </div>
+      </div>
+
+      <!-- Q3 Professional Ownership -->
+      <div class="wizard-step" data-wstep="2">
+        <div class="eyebrow q-dim">Professional Ownership</div>
+        <h2>Your work shipped with a flaw.</h2>
+        <p class="scenario">A reviewer caught a mistake in a deliverable you submitted. You…</p>
+        <div class="option-grid" data-group="ownership">
+          <button class="option" onclick="pickScenario(this,'ownership',100)"><span class="option-val">100</span><span class="option-text">Own it immediately, fix it, and document what I'll change next time</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'ownership',75)"><span class="option-val">75</span><span class="option-text">Acknowledge it and fix it</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'ownership',50)"><span class="option-val">50</span><span class="option-text">Fix it, but explain the constraints I was under</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'ownership',25)"><span class="option-val">25</span><span class="option-text">Point out it wasn't entirely my responsibility</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'ownership',0)"><span class="option-val">0</span><span class="option-text">Feel it's unfair and disengage</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+        </div>
+      </div>
+
+      <!-- Q4 Collaboration Style -->
+      <div class="wizard-step" data-wstep="3">
+        <div class="eyebrow q-dim">Collaboration Style</div>
+        <h2>Critical feedback lands on your desk.</h2>
+        <p class="scenario">When you receive harsh but fair feedback on your work, you…</p>
+        <div class="option-grid" data-group="collab">
+          <button class="option" onclick="pickScenario(this,'collab',100)"><span class="option-val">100</span><span class="option-text">Immediately identify what's valid and revise before asking for help</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'collab',75)"><span class="option-val">75</span><span class="option-text">Ask clarifying questions, then revise thoughtfully</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'collab',50)"><span class="option-val">50</span><span class="option-text">Revise, but feel defensive about the feedback</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'collab',25)"><span class="option-val">25</span><span class="option-text">Explain why the feedback is wrong rather than revise</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'collab',0)"><span class="option-val">0</span><span class="option-text">Ignore it or abandon the project</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+        </div>
+      </div>
+
+      <!-- Q5 Resilience -->
+      <div class="wizard-step" data-wstep="4">
+        <div class="eyebrow q-dim">Resilience Under Pressure</div>
+        <h2>The brief changes at the last minute.</h2>
+        <p class="scenario">The deadline tightens and the requirements shift right before submission. You…</p>
+        <div class="option-grid" data-group="resilience">
+          <button class="option" onclick="pickScenario(this,'resilience',100)"><span class="option-val">100</span><span class="option-text">Re-prioritize calmly and deliver the most important parts well</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'resilience',75)"><span class="option-val">75</span><span class="option-text">Push hard and adapt the plan on the fly</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'resilience',50)"><span class="option-val">50</span><span class="option-text">Deliver, but the stress shows in the quality</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'resilience',25)"><span class="option-val">25</span><span class="option-text">Do the bare minimum to get through it</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+          <button class="option" onclick="pickScenario(this,'resilience',0)"><span class="option-val">0</span><span class="option-text">Freeze or give up</span><span class="option-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span></button>
+        </div>
+      </div>
+
+      <!-- Profile report -->
+      <div class="wizard-step" data-wstep="5">
+        <div class="profile-report">
+          <div class="reco-badge"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 2a3 3 0 013 3v1a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v1a7 7 0 01-14 0v-1M12 18v4M8 22h8"/></svg></div>
+          <h2 style="font-size:24px;letter-spacing:-0.02em;">Your Professional Operating Profile</h2>
+          <p class="scenario" style="text-align:center;margin:8px auto 4px;max-width:440px;">This isn't a judgment — it's a starting point. Your missions and your AI manager's tone adapt to it.</p>
+          <div class="chip chip-accent" style="margin:10px 0 4px;">Overall operating score: <strong id="overallScore" style="margin-left:4px;">—</strong>/100</div>
+
+          <div class="dim-list" id="dimList"></div>
+
+          <div class="profile-split">
+            <div class="profile-box">
+              <h4>Your strengths</h4>
+              <div id="strengthsBox"></div>
+            </div>
+            <div class="profile-box">
+              <h4>Development areas</h4>
+              <div id="developBox"></div>
+            </div>
+          </div>
+
+          <div class="reco-missions">
+            <div class="label-xs" style="margin-bottom:12px;">Recommended first missions — matched to your profile</div>
+            <div class="reco-mission">
+              <div class="rm-logo" style="background:linear-gradient(140deg,#ff8a5b,#ff5b87)">N</div>
+              <div style="flex:1"><strong>Landing page for Nimbus Coffee Co.</strong><span id="recoReason1">Structured brief with clear acceptance criteria — a clean first win.</span></div>
+              <span class="chip chip-warning">Associate</span>
+            </div>
+            <div class="reco-mission">
+              <div class="rm-logo" style="background:linear-gradient(140deg,#a855f7,#7c3aed)">L</div>
+              <div style="flex:1"><strong>Brand style tile for Lumen Studio</strong><span>Builds visual systems thinking on a defined canvas.</span></div>
+              <span class="chip chip-warning">Associate</span>
+            </div>
+            <div class="reco-mission">
+              <div class="rm-logo" style="background:linear-gradient(140deg,#5b8def,#3b5bdb)">F</div>
+              <div style="flex:1"><strong>Email signup flow for Folio Inc.</strong><span>Light ambiguity to stretch your judgment.</span></div>
+              <span class="chip chip-warning">Associate</span>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-lg btn-block" onclick="finishAssessment()">
+            Enter your workspace
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="wizard-nav" id="wizardNav">
+        <button class="btn btn-ghost" id="wizBack" onclick="wizPrev()" style="visibility:hidden;">← Back</button>
+        <button class="btn btn-primary" id="wizNext" onclick="wizNext()" disabled>Continue →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 3: DASHBOARD ============ -->
+<section class="page" id="page-dashboard">
+  <div class="container">
+    <div class="app-head">
+      <div class="app-head-row">
+        <div>
+          <h1>Welcome back, Youcef <span class="wave">👋</span></h1>
+          <p>You have <strong style="color:var(--text)">1 active brief</strong>. Let's get it to approved.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openWarRoom()">Open Mission War Room →</button>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <div class="dash-main">
+        <div class="stat-strip">
+          <div class="stat">
+            <div class="label-xs">Reputation</div>
+            <div class="stat-val" id="dashRep">50</div>
+            <div class="stat-sub">Professional credibility</div>
+            <div class="stat-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21.4 8 14 2 9.4h7.6z"/></svg></div>
+          </div>
+          <div class="stat">
+            <div class="label-xs">Agency rank</div>
+            <div class="stat-val" id="dashRank" style="font-size:20px;">Associate</div>
+            <div class="stat-sub" id="dashRankSub">8 approvals to Specialist</div>
+            <div class="stat-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7l3 12h12l3-12-6 4-3-6-3 6-6-4z"/></svg></div>
+          </div>
+          <div class="stat">
+            <div class="label-xs">Approved missions</div>
+            <div class="stat-val" id="dashDone">0<small>/12</small></div>
+            <div class="stat-sub">Path to Portfolio Ready</div>
+            <div class="stat-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+          </div>
+          <div class="stat">
+            <div class="label-xs">Streak</div>
+            <div class="stat-val">7<small> days</small></div>
+            <div class="stat-sub"><span style="color:var(--warning)">🔥</span> Consistency counts</div>
+            <div class="stat-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 2s4 2 4 6c0-2 2-3 2-3s4 3 4 8a6 6 0 11-12 0c0-3 2-5 2-5"/></svg></div>
+          </div>
+        </div>
+
+        <div class="why-card">
+          <div class="label-xs">Why this matters to your career</div>
+          <p>This mission develops <b>conversion design</b>, <b>responsive layout</b>, and <b>visual hierarchy</b> — the exact skills hiring managers probe in a junior design interview. Approval makes it a <b>shareable portfolio asset</b>.</p>
+        </div>
+
+        <div class="spotlight">
+          <div class="spotlight-top">
+            <div><span class="chip chip-accent"><span class="dot"></span>Active brief · what I'm working on</span></div>
+            <div class="client-logo">N</div>
+          </div>
+          <h2>Launch landing page for the cold brew line</h2>
+          <div class="client-line"><span class="cl-logo client-logo" style="width:20px;height:20px;border-radius:6px;font-size:10px;">N</span>Client · Nimbus Coffee Co. · Tier: Associate</div>
+          <div class="spotlight-meta">
+            <div class="spot-meta-item"><div class="label-xs">Deliverable</div><strong>Responsive landing page</strong></div>
+            <div class="spot-meta-item"><div class="label-xs">Deadline</div><strong>3 days left</strong></div>
+            <div class="spot-meta-item"><div class="label-xs">On approval</div><strong>+ Portfolio asset</strong></div>
+          </div>
+          <div class="spotlight-foot">
+            <div style="flex:1;min-width:160px;">
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:7px;"><span class="meta">Your progress</span><span style="font-weight:600;">65%</span></div>
+              <div class="progress-track"><div class="progress-fill" style="width:65%"></div></div>
+            </div>
+            <button class="btn btn-primary" onclick="openWarRoom()">Continue → next action</button>
+          </div>
+        </div>
+
+        <div class="card panel">
+          <div class="panel-head">
+            <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Recent activity</h3>
+            <a onclick="go('progress');return false;" href="#">Reputation log</a>
+          </div>
+          <div class="activity-list" id="activityList">
+            <div class="activity-item">
+              <div class="act-ic amber"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></div>
+              <div class="act-body"><p><strong>Brief accepted</strong> — Nimbus Coffee landing page</p><time>Yesterday</time></div>
+            </div>
+            <div class="activity-item">
+              <div class="act-ic accent"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 013 3v1a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v1a7 7 0 01-14 0v-1"/></svg></div>
+              <div class="act-body"><p><strong>Profile generated</strong> — Professional Operating Profile complete</p><time>Yesterday</time></div>
+            </div>
+            <div class="activity-item">
+              <div class="act-ic accent"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21.4 8 14 2 9.4h7.6z"/></svg></div>
+              <div class="act-body"><p><strong>Joined the agency</strong> — Reputation initialized at 50/100</p><time>Yesterday</time></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-side">
+        <div class="card mentor-card">
+          <div class="mentor-top">
+            <div class="mentor-ava"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><path d="M12 2a3 3 0 013 3v1a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v1a7 7 0 01-14 0v-1M12 18v4M8 22h8"/></svg></div>
+            <div><strong>Maya · Senior Manager</strong><span>AI reviewer · online</span></div>
+          </div>
+          <div class="mentor-msg" id="mentorMsg">For Nimbus, the client judges the <span class="hl">pre-order CTA above the fold</span> first. Nail that, then layer the rest. I can guide your thinking — but the work has to be yours.</div>
+          <div class="mentor-actions">
+            <button class="mentor-quick" onclick="mentorReply('approach')">Pressure-test my approach</button>
+            <button class="mentor-quick" onclick="mentorReply('stuck')">I'm stuck</button>
+            <button class="mentor-quick" onclick="mentorReply('checklist')">Show acceptance criteria</button>
+          </div>
+        </div>
+
+        <div class="card panel">
+          <div class="panel-head"><h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>Notifications</h3><span class="chip chip-accent" style="padding:3px 9px;">2 new</span></div>
+          <div class="notif"><div class="notif-dot"></div><div><p>Your <strong>first review</strong> is the most important one. Submit when ready.</p><time>1 hour ago</time></div></div>
+          <div class="notif"><div class="notif-dot" style="background:var(--success)"></div><div><p>Approve this mission to publish your <strong>first portfolio asset</strong>.</p><time>Today</time></div></div>
+        </div>
+
+        <div class="card panel">
+          <div class="panel-head"><h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l3 12h12l3-12-6 4-3-6-3 6-6-4z"/></svg>What's next</h3></div>
+          <div class="milestone-list">
+            <div class="milestone" style="padding-top:0">
+              <div class="ms-check current">1</div>
+              <div class="ms-body"><strong>Submit the Nimbus deliverable</strong><span>Open the War Room and ship it for review</span></div>
+            </div>
+            <div class="milestone" style="padding-bottom:0;border-bottom:none">
+              <div class="ms-check">2</div>
+              <div class="ms-body"><strong>Earn your first approval</strong><span>Crosses you from student to contributor</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 4: MISSION ROADMAP ============ -->
+<section class="page" id="page-missions">
+  <div class="container">
+    <div class="app-head">
+      <div class="app-head-row">
+        <div>
+          <span class="eyebrow">Product Design · Skill path</span>
+          <h1>Mission roadmap</h1>
+          <p>Client briefs from Associate to Lead. Approvals unlock the next tier — rank gates the rest.</p>
+        </div>
+        <div class="chip chip-accent" style="padding:9px 14px;" id="roadmapCount">0 approved · Associate tier</div>
+      </div>
+    </div>
+
+    <div class="roadmap">
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterMissions(this,'all')">All briefs</button>
+        <button class="filter-btn" onclick="filterMissions(this,'active')">In progress</button>
+        <button class="filter-btn" onclick="filterMissions(this,'done')">Approved</button>
+        <button class="filter-btn" onclick="filterMissions(this,'locked')">Locked</button>
+      </div>
+
+      <div class="tier-label">Tier 1 · Associate</div>
+      <div class="mission-list" id="missionListT1">
+        <article class="mission-card active-m" data-status="active" id="missionActive">
+          <div class="mc-rail"><div class="mc-node">1</div></div>
+          <div class="mc-body">
+            <div class="mc-toprow">
+              <span class="mc-client"><span class="cl-logo" style="background:linear-gradient(140deg,#ff8a5b,#ff5b87)">N</span>Nimbus Coffee Co.</span>
+              <span class="chip chip-warning"><span class="dot"></span>In progress · 3 days left</span>
+            </div>
+            <h3>Launch landing page for the cold brew line</h3>
+            <p class="mc-desc">A conversion-focused, mobile-first landing page that makes pre-orders effortless.</p>
+            <div class="mc-tags">
+              <span class="mc-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>Deliverable: <strong>Landing page</strong></span>
+              <span class="mc-tag">Difficulty: <span class="diff-dots"><i class="on"></i><i class="on"></i><i></i></span></span>
+              <span class="mc-tag" style="color:var(--accent)"><strong>+ Portfolio asset</strong></span>
+            </div>
+          </div>
+          <div class="mc-right"><button class="btn btn-primary btn-sm" onclick="openWarRoom()">Open War Room →</button></div>
+        </article>
+
+        <article class="mission-card locked" data-status="locked">
+          <div class="mc-rail"><div class="mc-node"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div></div>
+          <div class="mc-body">
+            <div class="mc-toprow">
+              <span class="mc-client"><span class="cl-logo" style="background:linear-gradient(140deg,#a855f7,#7c3aed)">L</span>Lumen Studio</span>
+              <span class="chip chip-locked"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Clear Nimbus to unlock</span>
+            </div>
+            <h3>Create a brand style tile</h3>
+            <p class="mc-desc">Colors, type, and components that feel premium — the foundation for Lumen's rebrand.</p>
+            <div class="mc-tags">
+              <span class="mc-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>Deliverable: <strong>Style tile</strong></span>
+              <span class="mc-tag">Difficulty: <span class="diff-dots"><i class="on"></i><i class="on"></i><i></i></span></span>
+            </div>
+          </div>
+          <div class="mc-right"><button class="btn btn-ghost btn-sm" disabled>Locked</button></div>
+        </article>
+      </div>
+
+      <div class="tier-label">Tier 2 · Specialist — unlocks at 8 approvals</div>
+      <div class="mission-list">
+        <article class="mission-card locked" data-status="locked">
+          <div class="mc-rail"><div class="mc-node"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div></div>
+          <div class="mc-body">
+            <div class="mc-toprow">
+              <span class="mc-client"><span class="cl-logo" style="background:linear-gradient(140deg,#10b981,#059669)">V</span>Verde Health</span>
+              <span class="chip chip-locked"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Specialist tier</span>
+            </div>
+            <h3>Redesign onboarding for a wellness app</h3>
+            <p class="mc-desc">Reduce drop-off across the first three screens. Ambiguous brief, real stakeholder constraints.</p>
+            <div class="mc-tags">
+              <span class="mc-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>Deliverable: <strong>3-screen flow</strong></span>
+              <span class="mc-tag">Difficulty: <span class="diff-dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></span>
+            </div>
+          </div>
+          <div class="mc-right"><button class="btn btn-ghost btn-sm" disabled>Locked</button></div>
+        </article>
+        <article class="mission-card locked" data-status="locked">
+          <div class="mc-rail"><div class="mc-node"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div></div>
+          <div class="mc-body">
+            <div class="mc-toprow">
+              <span class="mc-client"><span class="cl-logo" style="background:linear-gradient(140deg,#6366f1,#4f46e5)">A</span>Arc Fintech</span>
+              <span class="chip chip-locked"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Specialist tier</span>
+            </div>
+            <h3>Design a dashboard for a fintech product</h3>
+            <p class="mc-desc">Dense data, zero clutter. A dashboard a busy founder can read in five seconds.</p>
+            <div class="mc-tags">
+              <span class="mc-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>Deliverable: <strong>Dashboard UI</strong></span>
+              <span class="mc-tag">Difficulty: <span class="diff-dots"><i class="on"></i><i class="on"></i><i class="on"></i></span></span>
+            </div>
+          </div>
+          <div class="mc-right"><button class="btn btn-ghost btn-sm" disabled>Locked</button></div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 5: MISSION WAR ROOM ============ -->
+<section class="page" id="page-warroom">
+  <div class="container">
+    <div class="warroom">
+      <a class="wr-back" onclick="go('missions')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Back to roadmap</a>
+      <div class="wr-head">
+        <div>
+          <div class="wr-client"><span class="client-logo" style="width:26px;height:26px;border-radius:7px;font-size:12px;">N</span>Client · Nimbus Coffee Co.</div>
+          <h1>Launch landing page for the cold brew line</h1>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="chip chip-warning"><span class="dot"></span>3 days left</span>
+          <span class="chip">Tier · Associate</span>
+          <span class="chip">1 revision allowed</span>
+        </div>
+      </div>
+
+      <div class="wr-grid">
+        <div class="wr-brief">
+          <div class="card wr-section">
+            <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Context</h3>
+            <p>Nimbus is launching a cold brew line for summer. Their audience is mobile-first, ages 22–35, and discovers products through social. They've validated demand — now they need pre-orders, not just awareness.</p>
+          </div>
+          <div class="card wr-section">
+            <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>The problem</h3>
+            <p>Their current page reads like a brochure. The pre-order action is buried below three scrolls of brand story, so interested visitors bounce before they ever reach it.</p>
+          </div>
+          <div class="card wr-section">
+            <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Objectives</h3>
+            <ul class="wr-list">
+              <li>Surface the pre-order action immediately, above the fold</li>
+              <li>Communicate the core product benefit in one line</li>
+              <li>Earn trust with a single, credible social-proof element</li>
+              <li>Stay fast and legible on a 360px phone</li>
+            </ul>
+          </div>
+          <div class="card wr-section">
+            <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Deliverables</h3>
+            <div class="wr-deliverable">
+              <div class="wd-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+              <div style="flex:1"><strong>Responsive landing page</strong><span>Desktop + mobile variant · figma, link, or file</span></div>
+            </div>
+            <div class="wr-deliverable">
+              <div class="wd-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></div>
+              <div style="flex:1"><strong>One-line rationale</strong><span>Why your hero leads where it does</span></div>
+            </div>
+          </div>
+          <div class="card wr-section">
+            <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Acceptance criteria</h3>
+            <ul class="wr-list checks">
+              <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Pre-order CTA visible above the fold</li>
+              <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Responsive down to 360px width</li>
+              <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Clear product benefit in the hero</li>
+              <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>One credible social-proof element</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="wr-side">
+          <div class="card submit-card">
+            <h3>Submit for review</h3>
+            <p class="meta">Maya reviews against the acceptance criteria — not for participation.</p>
+            <div class="dropzone" id="dropzone" onclick="mockUpload()">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              <p id="dropzoneText">Click to attach your deliverable<br><span class="meta">Figma link, PDF, or image</span></p>
+            </div>
+            <label class="field-label">Reflection — what did you learn? <span style="color:var(--text-faint);font-weight:400">(optional)</span></label>
+            <textarea class="wr-textarea" id="reflection" placeholder="Your process, the tradeoffs you made, what you'd refine with more time…"></textarea>
+            <button class="btn btn-primary btn-block" id="submitBtn" onclick="submitWork()">Submit for review</button>
+            <p class="revision-note">Associate tier · 1 revision allowed if Needs Revision</p>
+          </div>
+
+          <div class="card mentor-card">
+            <div class="mentor-top">
+              <div class="mentor-ava"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><path d="M12 2a3 3 0 013 3v1a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v1a7 7 0 01-14 0v-1M12 18v4M8 22h8"/></svg></div>
+              <div><strong>Maya · Senior Manager</strong><span>Guidance, not answers</span></div>
+            </div>
+            <div class="mentor-msg" id="wrMentorMsg">Before you submit, ask yourself: can a stranger pre-order in the first five seconds? If not, that's the one thing to fix.</div>
+            <div class="mentor-actions">
+              <button class="mentor-quick" onclick="wrMentor('approach')">Pressure-test my approach</button>
+              <button class="mentor-quick" onclick="wrMentor('stuck')">I'm stuck</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 6: REPUTATION & PROGRESS ============ -->
+<section class="page" id="page-progress">
+  <div class="container">
+    <div class="app-head">
+      <span class="eyebrow">Your standing</span>
+      <h1>Reputation & rank</h1>
+      <p>A transparent 0–100 credibility score. Every point came from an action you can see.</p>
+    </div>
+
+    <div class="prog-wrap">
+      <div class="prog-hero">
+        <div class="card level-card">
+          <div class="ring-wrap">
+            <div class="ring">
+              <svg width="132" height="132" viewBox="0 0 132 132">
+                <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#6f7bff"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs>
+                <circle class="ring-bg" cx="66" cy="66" r="58"/>
+                <circle class="ring-fg" cx="66" cy="66" r="58" id="ringFg" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+              </svg>
+              <div class="ring-center"><strong id="ringRep">50</strong><span>/ 100</span></div>
+            </div>
+            <div class="level-info">
+              <h3 id="progRankName">Associate</h3>
+              <p id="progRankDesc">You can execute assigned briefs correctly. Build approvals to reach Specialist.</p>
+              <div class="rep-breakdown">
+                <div class="rep-bd-row"><div class="rb-top"><span>Quality of work</span><span>—</span></div><div class="progress-track"><div class="progress-fill" id="bdQuality" style="width:0%"></div></div></div>
+                <div class="rep-bd-row"><div class="rb-top"><span>Consistency</span><span>—</span></div><div class="progress-track"><div class="progress-fill" id="bdConsistency" style="width:0%"></div></div></div>
+                <div class="rep-bd-row"><div class="rb-top"><span>Deadlines met</span><span>—</span></div><div class="progress-track"><div class="progress-fill" id="bdDeadlines" style="width:0%"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card streak-card">
+          <div class="streak-flame">🔥</div>
+          <div class="streak-big">7 <span style="font-size:18px;color:var(--text-dim);font-weight:600;">day streak</span></div>
+          <p class="meta" style="margin-top:6px;">Consistency feeds your reputation. A 7-day streak is worth +2.</p>
+          <div class="streak-days">
+            <div class="streak-day on">M</div><div class="streak-day on">T</div><div class="streak-day on">W</div><div class="streak-day on">T</div><div class="streak-day on">F</div><div class="streak-day on">S</div><div class="streak-day on today">S</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card panel">
+        <div class="panel-head"><h3>Agency rank ladder</h3><span class="meta">Promotion is earned through approved missions</span></div>
+        <div class="rank-ladder" id="rankLadder">
+          <div class="rank-step reached current" data-rank="0"><div class="rank-node">A</div><div class="rank-name">Associate</div><div class="rank-req">0–8 approvals</div></div>
+          <div class="rank-step" data-rank="1"><div class="rank-node">S</div><div class="rank-name">Specialist</div><div class="rank-req">8–20</div></div>
+          <div class="rank-step" data-rank="2"><div class="rank-node">Sr</div><div class="rank-name">Senior Spec.</div><div class="rank-req">20–40</div></div>
+          <div class="rank-step" data-rank="3"><div class="rank-node">L</div><div class="rank-name">Lead</div><div class="rank-req">40–70</div></div>
+          <div class="rank-step" data-rank="4"><div class="rank-node">P</div><div class="rank-name">Partner</div><div class="rank-req">70+ · rep 85</div></div>
+        </div>
+      </div>
+
+      <div class="card panel">
+        <div class="panel-head"><h3>Reputation log — how every point was earned</h3></div>
+        <div class="milestone-list" id="repLog">
+          <div class="milestone" style="padding-top:0">
+            <div class="ms-check current">+</div>
+            <div class="ms-body"><strong>Joined the agency</strong><span>Reputation initialized</span></div>
+            <div class="ms-rep">50 base</div>
+          </div>
+        </div>
+        <p class="meta" style="margin-top:14px;line-height:1.6">Approved <b style="color:var(--text)">+3</b> · Exceptional <b style="color:var(--text)">+5</b> · First-time approval <b style="color:var(--text)">+3</b> · Deadline met <b style="color:var(--text)">+1</b> · 7-day streak <b style="color:var(--text)">+2</b> · Needs Revision <b style="color:var(--text)">−1</b> · Missed deadline <b style="color:var(--text)">−5</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 7: PORTFOLIO / EVIDENCE PACKAGE ============ -->
+<section class="page" id="page-portfolio">
+  <div class="cert-wrap">
+    <div class="cert-celebrate">
+      <div class="reco-badge"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div>
+      <h1>Your Evidence Package</h1>
+      <p>This is what an employer sees — reputation, rank, and real deliverables, not a transcript. Public and verifiable.</p>
+    </div>
+
+    <div class="evidence-bar">
+      <div class="ev-stat"><strong class="accent" id="evRep">50</strong><span>Reputation</span></div>
+      <div class="ev-stat"><strong id="evRank" style="font-size:18px;">Associate</strong><span>Agency rank</span></div>
+      <div class="ev-stat"><strong class="success" id="evApproved">0</strong><span>Approved missions</span></div>
+      <div class="ev-stat"><strong id="evRate">—</strong><span>First-try approval</span></div>
+    </div>
+
+    <div class="card panel" style="margin-bottom:22px">
+      <div class="panel-head"><h3>Portfolio assets</h3><span class="meta" id="assetCount">0 published</span></div>
+      <div class="asset-grid" id="assetGrid">
+        <div class="asset-card ghost" id="ghostAsset">
+          <div class="asset-thumb"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div>
+          <div class="asset-meta"><div class="label-xs">Awaiting your first approval</div><h4>Your first asset appears here</h4><p class="meta">Complete the Nimbus mission to publish it.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card panel" style="margin-bottom:22px">
+      <div class="panel-head"><h3>Skills matrix</h3><span class="meta">Auto-populated from approved work</span></div>
+      <div class="skills-matrix" id="skillsMatrix">
+        <span class="skill-tag" style="opacity:.5">UI Design <span class="sk-count">0</span></span>
+        <span class="skill-tag" style="opacity:.5">Responsive layout <span class="sk-count">0</span></span>
+        <span class="skill-tag" style="opacity:.5">Conversion design <span class="sk-count">0</span></span>
+        <span class="skill-tag" style="opacity:.5">Visual hierarchy <span class="sk-count">0</span></span>
+      </div>
+    </div>
+
+    <div class="certificate">
+      <div class="cert-inner">
+        <div class="cert-top">
+          <div class="cert-seal"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div>
+          <div style="text-align:right;">
+            <div class="brand" style="justify-content:flex-end;"><span class="brand-mark" style="width:26px;height:26px;font-size:13px;">A</span>Atelier</div>
+            <div class="meta" style="margin-top:4px;">Verifiable credential</div>
+          </div>
+        </div>
+        <div class="cert-label">Certificate of professional execution</div>
+        <h2>Product Design — Foundations</h2>
+        <div class="cert-name">Youcef El Hakim</div>
+        <p class="cert-track">Awarded for executing client missions reviewed and approved against professional standards by an AI Senior Manager.</p>
+        <div class="cert-stats">
+          <div class="cert-stat"><strong id="certApproved">0</strong><span>Missions approved</span></div>
+          <div class="cert-stat"><strong id="certRep">50</strong><span>Reputation</span></div>
+          <div class="cert-stat"><strong id="certRank" style="font-size:18px">Associate</strong><span>Rank attained</span></div>
+        </div>
+        <div class="cert-label" style="margin-bottom:10px;">Skills demonstrated</div>
+        <div class="cert-skills">
+          <span class="chip chip-accent">UI Design</span>
+          <span class="chip chip-accent">Responsive layout</span>
+          <span class="chip chip-accent">Conversion design</span>
+          <span class="chip chip-accent">Visual hierarchy</span>
+        </div>
+        <div class="cert-foot">
+          <div><div class="cert-sign">Maya Okonkwo</div><div class="cert-sign-label">AI Senior Manager · Atelier</div></div>
+          <div style="text-align:right;"><div class="cert-id">Verify · atelier.io/verify/ATL-PD-2026-0419</div><div class="cert-sign-label">Issued June 2026</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cert-actions">
+      <button class="btn btn-primary" onclick="toast('Download started (prototype placeholder)','✓')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Download evidence package</button>
+      <button class="btn btn-ghost" onclick="toast('Public link copied (prototype placeholder)','🔗')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>Share to LinkedIn</button>
+      <button class="btn btn-ghost" onclick="go('missions')">Continue the path →</button>
+    </div>
+    <footer class="footer">Atelier Career OS · Evidence package is a prototype mockup · Not an accredited certification</footer>
+  </div>
+</section>
+
+</main>
+
+<!-- REVIEW OVERLAY -->
+<div class="review-overlay" id="reviewOverlay">
+  <div class="review-modal" id="reviewModal">
+    <div class="review-loading" id="reviewLoading">
+      <div class="review-spinner"></div>
+      <h3>Maya is reviewing your deliverable…</h3>
+      <p>Checking it against the acceptance criteria, not for participation.</p>
+    </div>
+    <div class="review-body hidden" id="reviewResult">
+      <div class="review-status-head">
+        <div class="review-status-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div><div class="rs-status">Approved</div><div class="rs-by">Reviewed by Maya · Senior Manager</div></div>
+      </div>
+      <div class="review-block"><h4>Strengths</h4><p>Your pre-order CTA sits exactly where it should — above the fold, high contrast, impossible to miss. The hero communicates the product benefit in a single line, which is harder than it looks.</p></div>
+      <div class="review-block"><h4>Development areas</h4><p>Your social proof is present but buried below the fold. Pulling one testimonial — or a "pre-ordered by 1,200 people" stat — up near the CTA would reduce hesitation at the decision point.</p></div>
+      <div class="review-block impact"><h4>Real-world impact</h4><p>Landing pages live or die on the first scroll. The clarity you built here is the difference between a bounce and a pre-order — this would hold up in a real launch.</p></div>
+      <div class="review-block"><h4>Next step</h4><p>Approved — this becomes your first portfolio asset. You're ready for the next Associate brief: Lumen Studio's brand style tile.</p></div>
+      <div class="rep-change"><span class="rc-label">Reputation update</span><span class="rc-val">50 → 56 &nbsp;(+3 approved, +3 first-time)</span></div>
+      <button class="btn btn-primary btn-block" onclick="closeReviewToSuccess()">See what this means →</button>
+    </div>
+  </div>
+</div>
+
+<!-- FIRST MISSION SUCCESS EXPERIENCE -->
+<div class="success-xp" id="successXp" aria-hidden="true">
+  <div class="sxp-dots" id="sxpDots"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <button class="sxp-skip" onclick="sxpFinish(false)">Skip ›</button>
+  <div class="sxp-stage">
+    <!-- P1 Approval -->
+    <div class="sxp-phase" data-phase="0">
+      <div class="sxp-center">
+        <div class="sxp-seal reveal" data-rev="0"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="sxp-from-manager reveal" data-rev="1"><div class="mentor-ava"></div> Maya · Senior Manager</div>
+        <h1 class="sxp-headline reveal" data-rev="2">Mission Approved.</h1>
+        <p class="sxp-sub reveal" data-rev="3">Your deliverable met professional standards.</p>
+      </div>
+      <div class="sxp-cta reveal" data-rev="4"><button class="btn btn-primary btn-lg" onclick="sxpNext()">See what this means →</button></div>
+    </div>
+    <!-- P2 Identity -->
+    <div class="sxp-phase" data-phase="1">
+      <div class="sxp-center">
+        <span class="eyebrow sxp-eyebrow reveal" data-rev="0">A threshold crossed</span>
+        <h2 class="sxp-headline reveal" data-rev="1" style="font-size:clamp(28px,4.5vw,42px);">You crossed the line.</h2>
+      </div>
+      <div class="identity-upgrade">
+        <div class="id-box before reveal" data-rev="2"><div class="label-xs">Before</div><div class="id-name">Student</div></div>
+        <div class="id-arrow reveal" data-rev="3"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="id-box after reveal" data-rev="4"><div class="label-xs" style="color:var(--accent)">After</div><div class="id-name">Contributor</div></div>
+      </div>
+      <p class="sxp-sub reveal" data-rev="5">You have produced your first professional deliverable.</p>
+      <div class="sxp-cta reveal" data-rev="6"><button class="btn btn-primary btn-lg" onclick="sxpNext()">Continue →</button></div>
+    </div>
+    <!-- P3 Impact -->
+    <div class="sxp-phase" data-phase="2">
+      <div class="sxp-center">
+        <span class="eyebrow sxp-eyebrow reveal" data-rev="0">What you actually gained</span>
+        <h2 class="sxp-headline reveal" data-rev="1" style="font-size:clamp(26px,4vw,38px);">Real-world value, logged.</h2>
+      </div>
+      <div class="impact-list">
+        <div class="impact-item reveal" data-rev="2"><div class="impact-plus">+</div><div><strong>Portfolio Asset Created</strong><span>A real deliverable you can show an employer</span></div></div>
+        <div class="impact-item reveal" data-rev="3"><div class="impact-plus">+</div><div><strong>Professional Experience Logged</strong><span>Added to your verified work history</span></div></div>
+        <div class="impact-item reveal" data-rev="4"><div class="impact-plus">+</div><div><strong>Skills Validated</strong><span>Reviewed and signed off by a Senior Manager</span></div></div>
+        <div class="impact-item reveal" data-rev="5"><div class="impact-plus">+</div><div><strong>First Approval Earned</strong><span>Proof you can execute, not just learn</span></div></div>
+      </div>
+      <div class="sxp-cta reveal" data-rev="6"><button class="btn btn-primary btn-lg" onclick="sxpNext()">Continue →</button></div>
+    </div>
+    <!-- P4 Recognition -->
+    <div class="sxp-phase" data-phase="3">
+      <div class="sxp-center">
+        <span class="eyebrow sxp-eyebrow reveal" data-rev="0">The agency recognises you</span>
+        <h2 class="sxp-headline reveal" data-rev="1" style="font-size:clamp(26px,4vw,38px);">Your standing, updated.</h2>
+      </div>
+      <div class="status-card reveal" data-rev="2">
+        <div class="status-inner">
+          <div class="status-head">
+            <div class="status-ava">YE</div>
+            <div><h3>Youcef El Hakim</h3><p>Junior Builder · Product Design</p></div>
+            <span class="chip chip-accent rank-badge">Contributor</span>
+          </div>
+          <div class="status-grid">
+            <div class="status-stat"><strong class="accent">56</strong><span>Reputation</span></div>
+            <div class="status-stat"><strong class="success">100%</strong><span>Success rate</span></div>
+            <div class="status-stat"><strong>1</strong><span>Delivered</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="sxp-cta reveal" data-rev="3"><button class="btn btn-primary btn-lg" onclick="sxpNext()">Continue →</button></div>
+    </div>
+    <!-- P5 Momentum -->
+    <div class="sxp-phase" data-phase="4">
+      <div class="sxp-center">
+        <span class="eyebrow sxp-eyebrow reveal" data-rev="0">Don't stop now</span>
+        <h2 class="sxp-headline reveal" data-rev="1" style="font-size:clamp(28px,4.5vw,44px);">Your next client is waiting.</h2>
+      </div>
+      <div class="next-brief reveal" data-rev="2">
+        <div class="next-brief-top">
+          <div class="next-brief-head">
+            <div class="client-logo" style="width:38px;height:38px;border-radius:10px;font-size:15px;background:linear-gradient(140deg,#a855f7,#7c3aed)">L</div>
+            <span class="chip chip-warning"><span class="dot"></span>Mission 02</span>
+          </div>
+          <div class="nb-row"><span>Client</span><span>Lumen Studio</span></div>
+          <div class="nb-row"><span>Objective</span><span>Build a premium brand style tile for their rebrand</span></div>
+          <div class="nb-row"><span>On approval</span><span style="color:var(--accent)">Reputation + 2nd portfolio asset</span></div>
+        </div>
+        <div class="nb-locked-hint">Full brief unlocks the moment you accept ›</div>
+      </div>
+      <div class="sxp-cta reveal" data-rev="3"><button class="btn btn-primary btn-lg" onclick="sxpNext()">Continue →</button></div>
+    </div>
+    <!-- P6 Timeline -->
+    <div class="sxp-phase" data-phase="5">
+      <div class="sxp-center">
+        <span class="eyebrow sxp-eyebrow reveal" data-rev="0">The road ahead</span>
+        <h2 class="sxp-headline reveal" data-rev="1" style="font-size:clamp(26px,4vw,38px);">Here's how far you can go.</h2>
+      </div>
+      <div class="timeline">
+        <div class="tl-item done reveal" data-rev="2"><div class="tl-node"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6L9 17l-5-5"/></svg></div><div class="tl-body"><strong>Assessment</strong><span>Profile complete · matched to your path</span></div></div>
+        <div class="tl-item done reveal" data-rev="3"><div class="tl-node"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6L9 17l-5-5"/></svg></div><div class="tl-body"><strong>First Mission</strong><span>Approved against professional standards</span></div></div>
+        <div class="tl-item next reveal" data-rev="4"><div class="tl-node">2</div><div class="tl-body"><strong>Mission 2 · Lumen Studio</strong><span>Ready to accept now</span></div></div>
+        <div class="tl-item locked reveal" data-rev="5"><div class="tl-node"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div><div class="tl-body"><strong>Specialist rank</strong><span>Unlocks at 8 approvals</span></div></div>
+        <div class="tl-item locked reveal" data-rev="6"><div class="tl-node"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div><div class="tl-body"><strong>Portfolio Certification</strong><span>Ship 5 approved deliverables</span></div></div>
+      </div>
+      <div class="sxp-cta reveal" data-rev="7">
+        <button class="btn btn-primary btn-lg" onclick="sxpFinish(true)">Accept Mission 2 →</button>
+        <button class="sxp-cta-text" onclick="sxpFinish(false)">Take me to my dashboard</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="bottom-nav" id="bottomNav">
+  <a class="bn-item" data-bn="landing" onclick="go('landing');return false;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</a>
+  <a class="bn-item" data-bn="dashboard" onclick="go('dashboard');return false;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dash</a>
+  <a class="bn-item" data-bn="missions" onclick="go('missions');return false;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Missions</a>
+  <a class="bn-item" data-bn="progress" onclick="go('progress');return false;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21.4 8 14 2 9.4h7.6z"/></svg>Rep</a>
+  <a class="bn-item" data-bn="portfolio" onclick="go('portfolio');return false;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Portfolio</a>
+</nav>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+/* ===================== STATE ===================== */
+const RANKS = [
+  {name:'Associate', min:0, desc:'You can execute assigned briefs correctly. Build approvals to reach Specialist.'},
+  {name:'Specialist', min:8, desc:'You handle ambiguity and multi-part deliverables.'},
+  {name:'Senior Specialist', min:20, desc:'You raise the quality bar and mentor others.'},
+  {name:'Lead', min:40, desc:'You own outcomes and strategic decisions.'},
+  {name:'Partner', min:70, desc:'You shape the direction of the agency itself.'},
+];
+const state = {
+  page:'landing',
+  wizardStep:0,
+  dims:{exec:null, agility:null, ownership:null, collab:null, resilience:null},
+  reputation:50,
+  approved:0,
+  firstApprovalDone:false,
+};
+
+/* ===================== NAV ===================== */
+function go(page){
+  state.page = page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const el = document.getElementById('page-'+page);
+  if(el) el.classList.add('active');
+  const navKey = (page==='warroom') ? 'missions' : page;
+  document.querySelectorAll('.nav-link[data-nav]').forEach(n=>n.classList.toggle('active', n.dataset.nav===navKey));
+  document.querySelectorAll('.bn-item').forEach(n=>n.classList.toggle('active', n.dataset.bn===navKey));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(page==='progress') animateProgress();
+}
+function toggleMenu(open){ document.getElementById('mobileMenu').classList.toggle('open', open); }
+
+/* ===================== ASSESSMENT ===================== */
+function pickScenario(btn, group, value){
+  const wrap = btn.closest('[data-group]');
+  wrap.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+  btn.classList.add('selected');
+  state.dims[group] = value;
+  document.getElementById('wizNext').disabled = false;
+}
+const DIM_KEYS = ['exec','agility','ownership','collab','resilience'];
+const DIM_NAMES = {exec:'Execution Discipline', agility:'Learning Agility', ownership:'Professional Ownership', collab:'Collaboration Style', resilience:'Resilience Under Pressure'};
+
+function refreshStepper(){
+  document.querySelectorAll('#stepper .step-node').forEach((n,i)=>{
+    n.classList.toggle('active', i===state.wizardStep);
+    n.classList.toggle('done', i<state.wizardStep);
+  });
+  document.querySelectorAll('#stepper .step-bar').forEach((b,i)=>b.classList.toggle('filled', i<state.wizardStep));
+}
+function showWizardStep(){
+  document.querySelectorAll('.wizard-step').forEach((s,i)=>s.classList.toggle('active', i===state.wizardStep));
+  refreshStepper();
+  const back=document.getElementById('wizBack'), next=document.getElementById('wizNext'), nav=document.getElementById('wizardNav');
+  back.style.visibility = state.wizardStep===0 ? 'hidden':'visible';
+  if(state.wizardStep < 5){
+    nav.style.display='flex';
+    next.disabled = state.dims[DIM_KEYS[state.wizardStep]]===null;
+    next.textContent = state.wizardStep===4 ? 'Generate my profile →' : 'Continue →';
+  } else { nav.style.display='none'; }
+}
+function wizNext(){
+  if(state.wizardStep < 5){
+    state.wizardStep++;
+    if(state.wizardStep===5) buildProfile();
+    showWizardStep();
+    document.querySelector('.wizard-wrap').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+function wizPrev(){ if(state.wizardStep>0){ state.wizardStep--; showWizardStep(); } }
+
+function buildProfile(){
+  const entries = DIM_KEYS.map(k=>({key:k, name:DIM_NAMES[k], val: state.dims[k]==null?50:state.dims[k]}));
+  const overall = Math.round(entries.reduce((s,e)=>s+e.val,0)/entries.length);
+  document.getElementById('overallScore').textContent = overall;
+  const sorted=[...entries].sort((a,b)=>b.val-a.val);
+  const strengths=sorted.slice(0,2).map(e=>e.key);
+  const develop=sorted.slice(-2).map(e=>e.key);
+  // dimension bars
+  const list=document.getElementById('dimList'); list.innerHTML='';
+  entries.forEach(e=>{
+    let tag='';
+    if(strengths.includes(e.key)) tag='<span class="dim-tag strength">Strength</span>';
+    else if(develop.includes(e.key)) tag='<span class="dim-tag develop">Develop</span>';
+    list.insertAdjacentHTML('beforeend',
+      `<div class="dim-row"><div class="dim-top"><span class="dim-name">${e.name}${tag}</span><span class="dim-score">${e.val}</span></div>
+       <div class="progress-track"><div class="progress-fill" style="width:0%" data-w="${e.val}"></div></div></div>`);
+  });
+  setTimeout(()=>document.querySelectorAll('#dimList .progress-fill').forEach(f=>f.style.width=f.dataset.w+'%'),120);
+  const sBox=document.getElementById('strengthsBox'); sBox.innerHTML='';
+  strengths.forEach(k=>sBox.insertAdjacentHTML('beforeend',`<div class="pb-item"><span class="pb-dot" style="background:var(--success)"></span>${DIM_NAMES[k]}</div>`));
+  const dBox=document.getElementById('developBox'); dBox.innerHTML='';
+  develop.forEach(k=>dBox.insertAdjacentHTML('beforeend',`<div class="pb-item"><span class="pb-dot" style="background:var(--warning)"></span>${DIM_NAMES[k]}</div>`));
+  // tailor first reco reason by agility
+  const reason = state.dims.agility!=null && state.dims.agility<=50
+    ? 'Highly structured brief with explicit acceptance criteria — matched to build your confidence first.'
+    : 'A clean, well-scoped brief to convert your judgment into a fast, visible first win.';
+  document.getElementById('recoReason1').textContent = reason;
+}
+function finishAssessment(){ toast('Profile generated — workspace ready','✓'); go('dashboard'); }
+
+/* ===================== DASHBOARD MENTOR ===================== */
+const mentorReplies = {
+  approach:"Good instinct. Now stress-test it: if I landed cold, would the value be obvious before I scroll? Lead with the benefit, not the brand story.",
+  stuck:"Start with the one thing the client judges first — the pre-order CTA. Build that, then layer the rest. Want me to break the brief into 3 smaller tasks?",
+  checklist:"Acceptance criteria: ① pre-order CTA above the fold ② responsive to 360px ③ clear product benefit in the hero ④ one social-proof element. Hit all four and it's an approval.",
+};
+function mentorReply(key){ typeInto('mentorMsg', mentorReplies[key]); }
+const wrReplies = {
+  approach:"Solid. One push: your hero headline should name the benefit, not the product. \"Cold brew, delivered cold\" beats \"Introducing our cold brew.\"",
+  stuck:"Don't redesign everything. Get the CTA above the fold and the benefit in one line. Those two moves clear most of the acceptance criteria.",
+};
+function wrMentor(key){ typeInto('wrMentorMsg', wrReplies[key]); }
+function typeInto(id, text){
+  const box=document.getElementById(id);
+  box.innerHTML='<span class="typing"><span></span><span></span><span></span></span>';
+  setTimeout(()=>box.textContent=text, 850);
+}
+
+/* ===================== MISSIONS / WAR ROOM ===================== */
+function filterMissions(btn, filter){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mission-card').forEach(c=>c.classList.toggle('hidden', filter!=='all' && c.dataset.status!==filter));
+}
+function openWarRoom(){ go('warroom'); }
+let hasFile=false;
+function mockUpload(){
+  hasFile=true;
+  const dz=document.getElementById('dropzone');
+  dz.classList.add('has-file');
+  dz.querySelector('svg').outerHTML='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
+  document.getElementById('dropzoneText').innerHTML='nimbus-landing-v2.fig attached<br><span class="meta">Ready to submit</span>';
+}
+
+/* ===================== REVIEW + SUCCESS ===================== */
+function submitWork(){
+  const ov=document.getElementById('reviewOverlay');
+  document.getElementById('reviewLoading').classList.remove('hidden');
+  document.getElementById('reviewResult').classList.add('hidden');
+  ov.classList.add('open');
+  document.body.style.overflow='hidden';
+  // simulate review delay (humans distrust instant feedback)
+  setTimeout(()=>{
+    document.getElementById('reviewLoading').classList.add('hidden');
+    document.getElementById('reviewResult').classList.remove('hidden');
+  }, 2600);
+}
+function closeReviewToSuccess(){
+  document.getElementById('reviewOverlay').classList.remove('open');
+  applyApproval();
+  sxpOpen();
+}
+function applyApproval(){
+  if(state.firstApprovalDone) return;
+  state.firstApprovalDone=true;
+  state.approved=1;
+  state.reputation=56;
+  updateRepUI();
+  // flip the active mission card to approved + unlock next
+  const card=document.getElementById('missionActive');
+  if(card){
+    card.classList.remove('active-m'); card.classList.add('done'); card.dataset.status='done';
+    card.querySelector('.mc-node').innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6L9 17l-5-5"/></svg>';
+    const chip=card.querySelector('.mc-toprow .chip'); chip.className='chip chip-success'; chip.innerHTML='<span class="dot"></span>Approved';
+    card.querySelector('.mc-right').innerHTML='<button class="btn btn-ghost btn-sm" onclick="go(\'portfolio\')">View asset</button>';
+  }
+  // unlock Lumen (first locked in T1)
+  const locked=document.querySelector('#missionListT1 .mission-card.locked');
+  if(locked){
+    locked.classList.remove('locked'); locked.dataset.status='active'; locked.classList.add('active-m');
+    locked.querySelector('.mc-node').textContent='2';
+    const lc=locked.querySelector('.mc-toprow .chip'); lc.className='chip chip-warning'; lc.innerHTML='<span class="dot"></span>Unlocked · ready to start';
+    locked.querySelector('.mc-right').innerHTML='<button class="btn btn-primary btn-sm" onclick="go(\'warroom\')">Accept brief</button>';
+  }
+  // dashboard + activity
+  document.getElementById('dashDone').innerHTML='1<small>/12</small>';
+  addActivity('<p><strong>Deliverable approved</strong> — Nimbus landing page · Reputation 50 → 56</p><time>Just now</time>','green');
+  // reputation log
+  const log=document.getElementById('repLog');
+  log.insertAdjacentHTML('afterbegin',
+    `<div class="milestone fresh" style="padding-top:0"><div class="ms-check done"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6L9 17l-5-5"/></svg></div><div class="ms-body"><strong>Nimbus landing page — Approved</strong><span>First-time approval bonus included</span></div><div class="ms-rep">+6</div></div>`);
+  // portfolio
+  publishFirstAsset();
+}
+function publishFirstAsset(){
+  const ghost=document.getElementById('ghostAsset');
+  if(ghost) ghost.remove();
+  document.getElementById('assetGrid').insertAdjacentHTML('afterbegin',
+    `<div class="asset-card"><div class="asset-thumb" style="background:linear-gradient(140deg,#ff8a5b,#ff5b87)">N</div>
+     <div class="asset-meta"><div class="label-xs">Nimbus Coffee Co. · Approved</div><h4>Cold brew landing page</h4>
+     <p class="meta">Conversion-focused, mobile-first pre-order page.</p>
+     <p class="asset-review">"The clarity you built here is the difference between a bounce and a pre-order." — Maya</p></div></div>`);
+  document.getElementById('assetCount').textContent='1 published';
+  // skills matrix -> activate
+  document.querySelectorAll('#skillsMatrix .skill-tag').forEach(t=>{ t.style.opacity='1'; t.querySelector('.sk-count').textContent='1'; });
+  // evidence + cert numbers
+  ['evApproved','certApproved'].forEach(id=>document.getElementById(id).textContent='1');
+  ['evRate'].forEach(id=>document.getElementById(id).textContent='100%');
+}
+function updateRepUI(){
+  const r=state.reputation;
+  const rank=RANKS.slice().reverse().find(x=>state.approved>=x.min) || RANKS[0];
+  document.getElementById('navRep').textContent=r;
+  document.getElementById('navRepBadge').textContent=rank.name[0];
+  document.getElementById('dashRep').textContent=r;
+  document.getElementById('dashRank').textContent=rank.name;
+  const next=RANKS.find(x=>x.min>state.approved);
+  document.getElementById('dashRankSub').textContent= next ? `${next.min-state.approved} approvals to ${next.name}` : 'Top rank reached';
+  ['evRep','certRep'].forEach(id=>document.getElementById(id).textContent=r);
+  ['evRank','certRank'].forEach(id=>document.getElementById(id).textContent=rank.name);
+  document.getElementById('progRankName').textContent=rank.name;
+}
+function addActivity(html, type='accent'){
+  const ic={green:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>',
+            accent:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21.4 8 14 2 9.4h7.6z"/></svg>'};
+  const item=document.createElement('div'); item.className='activity-item fresh';
+  item.innerHTML=`<div class="act-ic ${type}">${ic[type]}</div><div class="act-body">${html}</div>`;
+  document.getElementById('activityList').prepend(item);
+}
+
+/* ===================== PROGRESS ANIMATION ===================== */
+function animateProgress(){
+  const pct=Math.max(6,Math.min(100,state.reputation));
+  const C=2*Math.PI*58;
+  setTimeout(()=>{
+    const ring=document.getElementById('ringFg');
+    if(ring) ring.style.strokeDashoffset=C*(1-pct/100);
+    document.getElementById('bdQuality').style.width=(state.firstApprovalDone?'70':'40')+'%';
+    document.getElementById('bdConsistency').style.width='80%';
+    document.getElementById('bdDeadlines').style.width=(state.firstApprovalDone?'100':'60')+'%';
+  },150);
+  document.getElementById('ringRep').textContent=state.reputation;
+  // rank ladder highlight
+  const rankIdx=RANKS.reduce((acc,x,i)=>state.approved>=x.min?i:acc,0);
+  document.querySelectorAll('#rankLadder .rank-step').forEach((s,i)=>{
+    s.classList.toggle('reached', i<=rankIdx);
+    s.classList.toggle('current', i===rankIdx);
+  });
+}
+
+/* ===================== SUCCESS EXPERIENCE ===================== */
+const SXP_TOTAL=6; let sxpPhase=0;
+const sxpTiming={0:{base:350,gap:650,custom:{3:1500}}, default:{base:250,gap:280}};
+function sxpOpen(){
+  sxpPhase=0;
+  const ov=document.getElementById('successXp');
+  ov.classList.add('open'); ov.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  showSxpPhase(0);
+}
+function showSxpPhase(i){
+  sxpPhase=i;
+  document.querySelectorAll('.sxp-phase').forEach((p,idx)=>p.classList.toggle('active', idx===i));
+  document.querySelectorAll('#sxpDots i').forEach((d,idx)=>d.classList.toggle('on', idx<=i));
+  const phase=document.querySelector('.sxp-phase[data-phase="'+i+'"]');
+  const revs=[...phase.querySelectorAll('.reveal')];
+  revs.forEach(r=>r.classList.remove('shown'));
+  const t=sxpTiming[i]||sxpTiming.default; let delay=t.base;
+  revs.forEach((r,idx)=>{ delay += (t.custom&&t.custom[idx])?t.custom[idx]:t.gap; const d=delay; setTimeout(()=>r.classList.add('shown'),d); });
+  document.getElementById('successXp').scrollTo({top:0});
+}
+function sxpNext(){ if(sxpPhase<SXP_TOTAL-1) showSxpPhase(sxpPhase+1); else sxpFinish(true); }
+function sxpFinish(acceptNext){
+  const ov=document.getElementById('successXp');
+  ov.classList.remove('open'); ov.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+  if(acceptNext){
+    toast('Mission 2 accepted — Lumen Studio','🚀');
+    go('missions');
+    setTimeout(()=>{
+      const m=document.querySelector('.mission-card.active-m');
+      if(m){ m.scrollIntoView({behavior:'smooth',block:'center'}); m.style.boxShadow='0 0 0 3px var(--accent-line)'; setTimeout(()=>m.style.boxShadow='',1600); }
+    },350);
+  } else { go('dashboard'); }
+}
+
+/* ===================== UTIL ===================== */
+function toast(msg, icon='✓'){
+  const wrap=document.getElementById('toastWrap');
+  const t=document.createElement('div'); t.className='toast';
+  t.innerHTML=`<span class="toast-ic">${icon}</span><span>${msg}</span>`;
+  wrap.appendChild(t);
+  setTimeout(()=>{ t.classList.add('out'); setTimeout(()=>t.remove(),300); },2800);
+}
+
+/* ===================== INIT ===================== */
+showWizardStep();
+go('landing');
+</script>
+</body>
+</html>
